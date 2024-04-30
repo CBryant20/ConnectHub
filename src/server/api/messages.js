@@ -1,0 +1,91 @@
+/*
+GET /api/messages: Retrieve a list of all messages.
+GET /api/messages/:id: Retrieve a specific message by ID.
+POST /api/messages: Create a new message.
+POST /api/messages/:id: Update an existing message.
+DELETE /api/messages/:id: Delete a message by ID.
+*/
+
+const { ServerError } = require("../errors");
+const prisma = require("../prisma");
+
+const router = require("express").Router();
+
+// Retrieve all messages
+router.get("/messages", async (req, res, next) => {
+  try {
+    const messages = await prisma.message.findMany();
+    res.json(messages);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Retrieve a specific message by ID
+router.get("/messages/:id", async (req, res, next) => {
+  try {
+    const messageId = +req.params.id;
+    const message = await prisma.message.findUnique({
+      where: { id: messageId },
+    });
+    res.json(message);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Create a new message
+router.post("/messages", async (req, res, next) => {
+  try {
+    const { content, senderId, adminId } = req.body;
+
+    // Validate request body
+    if (!content || !senderId) {
+      return next(new ServerError(400, "Content and senderId are required."));
+    }
+
+    // Create message
+    const newMessage = await prisma.message.create({
+      data: { content, senderId, adminId },
+    });
+
+    res.status(201).json(newMessage);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Update an existing message
+router.put("/messages/:id", async (req, res, next) => {
+  try {
+    const messageId = +req.params.id;
+    const { content } = req.body;
+
+    // Validate request body
+    if (!content) {
+      return next(new ServerError(400, "Content is required."));
+    }
+
+    // Update message
+    const updatedMessage = await prisma.message.update({
+      where: { id: messageId },
+      data: { content },
+    });
+
+    res.json(updatedMessage);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Delete a message by ID
+router.delete("/messages/:id", async (req, res, next) => {
+  try {
+    const messageId = +req.params.id;
+
+    await prisma.message.delete({ where: { id: messageId } });
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+});
