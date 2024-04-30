@@ -1,7 +1,7 @@
-@bg: #ffffff;
-@text: #333;
-@link-color: #428bca; // sea blue
-@link-color-hover: darken(@link-color, 10%);
+$bg: #ffffff;
+$text: #333;
+$link-color: #428bca; // sea blue
+$link-color-hover: darken($link-color, 10%);
 
 @font-face {
   font-family: Inter;
@@ -11,8 +11,8 @@
 :root {
   font-family: Inter, sans-serif;
 
-  color: @text;
-  background-color: @bg;
+  color: $text;
+  background-color: $bg;
 }
 
 * {
@@ -29,11 +29,11 @@ menu {
 
 a {
   text-decoration: none;
-  color: @link-color;
+  color: $link-color;
   cursor: pointer;
 
   &:hover {
     text-decoration: underline;
-    color: @link-color-hover;
+    color: $link-color-hover;
   }
 }

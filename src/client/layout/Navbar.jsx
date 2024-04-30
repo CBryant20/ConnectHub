@@ -2,12 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout, selectToken } from "../features/auth/authSlice";
 
-import "./Navbar.less";
+import "./Navbar.scss";
 
-/**
- * A simple navigation bar that displays "Log In" if the user is not logged in,
- * and "Log Out" if the user is logged in.
- */
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,11 +16,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="top">
+    <nav className='top'>
       <h1>Task Tracker</h1>
       <menu>
         <li>
-          <NavLink to="/">Home</NavLink>
+          <NavLink to='/'>Home</NavLink>
         </li>
         {token ? (
           <li>
@@ -32,7 +28,7 @@ export default function Navbar() {
           </li>
         ) : (
           <li>
-            <NavLink to="/login">Log In</NavLink>
+            <NavLink to='/login'>Log In</NavLink>
           </li>
         )}
       </menu>

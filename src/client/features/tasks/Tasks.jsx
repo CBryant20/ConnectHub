@@ -4,7 +4,7 @@ import NewTask from "./NewTask";
 import Task from "./Task";
 import { useGetTasksQuery } from "./taskSlice";
 
-import "./Tasks.less";
+import "./Tasks.scss";
 
 /** Main interface for user to interact with their tasks */
 export default function Tasks() {
@@ -16,7 +16,7 @@ export default function Tasks() {
   }
 
   return (
-    <div className="tasks">
+    <div className='tasks'>
       <h1>Tasks</h1>
       <h2>Add New Task</h2>
       <NewTask />
