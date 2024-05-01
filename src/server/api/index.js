@@ -28,5 +28,5 @@ router.use(async (req, res, next) => {
 
 router.use("/auth", require("./auth"));
 router.use("/users", require("./users"));
-router.use("/admins", require("./admins"));
 router.use("/messages", require("./messages"));
+router.use("/likes", require("./likes"));

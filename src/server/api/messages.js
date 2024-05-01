@@ -2,7 +2,7 @@
 GET /api/messages: Retrieve a list of all messages.
 GET /api/messages/:id: Retrieve a specific message by ID.
 POST /api/messages: Create a new message.
-POST /api/messages/:id: Update an existing message.
+PATCH /api/messages/:id: Update an existing message.
 DELETE /api/messages/:id: Delete a message by ID.
 */
 
@@ -34,12 +34,17 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { content, senderId, adminId } = req.body;
+    const { content, senderId } = req.body;
     if (!content || !senderId) {
       return next(new ServerError(400, "Content and senderId are required."));
     }
+    const senderIdInt = parseInt(senderId, 10);
+
+    if (isNaN(senderIdInt)) {
+      return next(new ServerError(400, "senderId must be a valid integer."));
+    }
     const newMessage = await prisma.message.create({
-      data: { content, senderId, adminId },
+      data: { content, senderId: senderIdInt },
     });
     res.status(201).json(newMessage);
   } catch (err) {

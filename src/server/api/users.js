@@ -20,7 +20,7 @@ router.use((req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const users = await prisma.user.findMany({
-      select: { id: true, username: true },
+      select: { id: true, fullName: true, email: true },
     });
     res.json(users);
   } catch (err) {
@@ -33,7 +33,7 @@ router.get("/:id", async (req, res, next) => {
     const id = +req.params.id;
     const user = await prisma.user.findUnique({
       where: { id },
-      select: { id: true, username: true },
+      select: { id: true, fullName: true, email: true },
     });
     res.json(user);
   } catch (err) {
@@ -44,13 +44,15 @@ router.get("/:id", async (req, res, next) => {
 router.patch("/:id", async (req, res, next) => {
   try {
     const userId = +req.params.id;
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return next(new ServerError(400, "Username and password are required."));
+    const { fullName, email, password, isAdmin } = req.body;
+    if (!fullName || !email || !password || !isAdmin) {
+      return next(
+        new ServerError(400, "Full name, email, and password are required.")
+      );
     }
     const updatedUser = await prisma.user.update({
       where: { id: userId },
-      data: { username, password },
+      data: { fullName, email, password, isAdmin },
     });
     res.json(updatedUser);
   } catch (err) {

@@ -17,11 +17,13 @@
     "seed": "node src/server/prisma/seed.js"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@prisma/client": "^5.13.0",
     "@reduxjs/toolkit": "^1.9.7",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",
     "express": "^4.19.2",
+    "faker": "^5.5.3",
     "jsonwebtoken": "^9.0.2",
     "less": "^4.2.0",
     "morgan": "^1.10.0",

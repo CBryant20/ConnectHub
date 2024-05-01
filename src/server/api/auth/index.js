@@ -5,30 +5,26 @@ const bcrypt = require("bcrypt");
 const router = require("express").Router();
 module.exports = router;
 
-/** Creates new account and returns token */
 router.post("/register", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { fullName, email, password } = req.body;
 
-    // Check if username and password provided
-    if (!username || !password) {
-      throw new ServerError(400, "Username and password required.");
-    }
-
-    // Check if account already exists
-    const user = await prisma.user.findUnique({
-      where: { username },
-    });
-    if (user) {
+    if (!fullName || !email || !password) {
       throw new ServerError(
         400,
-        `Account with username ${username} already exists.`
+        "Full name, email, and password are required."
       );
     }
 
-    // Create new user
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (user) {
+      throw new ServerError(400, `Account with email ${email} already exists.`);
+    }
+
     const newUser = await prisma.user.create({
-      data: { username, password },
+      data: { fullName, email, password },
     });
 
     const token = jwt.sign({ id: newUser.id });
@@ -41,25 +37,19 @@ router.post("/register", async (req, res, next) => {
 /** Returns token for account if credentials valid */
 router.post("/login", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { fullName, email, password } = req.body;
 
-    // Check if username and password provided
-    if (!username || !password) {
-      throw new ServerError(400, "Username and password required.");
+    if (!fullName || !email || !password) {
+      throw new ServerError(400, "Full name, email and password required.");
     }
 
-    // Check if account exists
     const user = await prisma.user.findUnique({
-      where: { username },
+      where: { email },
     });
     if (!user) {
-      throw new ServerError(
-        400,
-        `Account with username ${username} does not exist.`
-      );
+      throw new ServerError(400, `Account with email ${email} does not exist.`);
     }
 
-    // Check if password is correct
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!passwordValid) {
       throw new ServerError(401, "Invalid password.");
