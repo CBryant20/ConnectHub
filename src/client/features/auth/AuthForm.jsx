@@ -1,42 +1,56 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation, useRegisterMutation } from "./authSlice";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+  useChangePasswordMutation,
+} from "./authSlice";
 
-/** This form allows users to register or log in. */
 export default function AuthForm() {
   const navigate = useNavigate();
 
-  // Handles swapping between login and register
   const [isLogin, setIsLogin] = useState(true);
-  const authAction = isLogin ? "Login" : "Register";
-  const altCopy = isLogin
-    ? "Need an account? Register here."
-    : "Already have an account? Login here.";
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
-  // Controlled form fields
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [newFullName, setNewFullName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
-  // Form submission
   const [login, { isLoading: loginLoading, error: loginError }] =
     useLoginMutation();
   const [register, { isLoading: registerLoading, error: registerError }] =
     useRegisterMutation();
+  const [
+    changePassword,
+    { isLoading: changePasswordLoading, error: changePasswordError },
+  ] = useChangePasswordMutation();
 
-  /** Send the requested authentication action to the API */
-  const attemptAuth = async (evt) => {
+  const handleAuthAction = async (evt) => {
     evt.preventDefault();
 
-    const authMethod = isLogin ? login : register;
-    const credentials = { fullName, email, password };
+    const credentials = { email, password };
+    const credentials2 = { fullName, email, password };
 
-    // We don't want to navigate if there's an error.
-    // `unwrap` will throw an error if there is one
-    // so we can use a try/catch to handle it.
     try {
-      await authMethod(credentials).unwrap();
+      if (isLogin) {
+        await login(credentials).unwrap();
+      } else {
+        await register(credentials2).unwrap();
+      }
       navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    try {
+      await changePassword({
+        fullName: newFullName,
+        newPassword,
+      }).unwrap();
     } catch (err) {
       console.error(err);
     }
@@ -44,17 +58,19 @@ export default function AuthForm() {
 
   return (
     <>
-      <h1>{authAction}</h1>
-      <form onSubmit={attemptAuth}>
-        <label>
-          Full Name
-          <input
-            type='text'
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            autoComplete='fullName'
-          />
-        </label>
+      <h1>{isLogin ? "Login" : "Register"}</h1>
+      <form onSubmit={handleAuthAction}>
+        {!isLogin && (
+          <label>
+            Full Name
+            <input
+              type='text'
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              autoComplete='fullName'
+            />
+          </label>
+        )}
         <label>
           Email
           <input
@@ -73,13 +89,51 @@ export default function AuthForm() {
             autoComplete='current-password'
           />
         </label>
-        <button>{authAction}</button>
+        <button type='submit'>{isLogin ? "Login" : "Register"}</button>
       </form>
-      <a onClick={() => setIsLogin(!isLogin)}>{altCopy}</a>
+      <a onClick={() => setIsLogin(!isLogin)}>
+        {isLogin ? "Register here" : "Login here"}
+      </a>
 
-      {(loginLoading || registerLoading) && <p>Please wait...</p>}
+      {(loginLoading || registerLoading || changePasswordLoading) && (
+        <p>Please wait...</p>
+      )}
       {loginError && <p role='alert'>{loginError}</p>}
       {registerError && <p role='alert'>{registerError}</p>}
+      {changePasswordError && <p role='alert'>{changePasswordError.message}</p>}
+
+      {isLogin && (
+        <button onClick={() => setShowChangePassword(true)}>
+          Forgot Password?
+        </button>
+      )}
+
+      {showChangePassword && (
+        <>
+          <h2>Change Password</h2>
+          <form onSubmit={handleChangePassword}>
+            <label>
+              Full Name
+              <input
+                type='text'
+                value={newFullName}
+                onChange={(e) => setNewFullName(e.target.value)}
+                autoComplete='fullName'
+              />
+            </label>
+            <label>
+              New Password
+              <input
+                type='password'
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </label>
+            <button type='submit'>Change Password</button>
+          </form>
+          {changePasswordLoading && <p>Please wait...</p>}
+        </>
+      )}
     </>
   );
 }
