@@ -14,7 +14,8 @@ export default function AuthForm() {
     : "Already have an account? Login here.";
 
   // Controlled form fields
-  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // Form submission
@@ -28,7 +29,7 @@ export default function AuthForm() {
     evt.preventDefault();
 
     const authMethod = isLogin ? login : register;
-    const credentials = { username, password };
+    const credentials = { fullName, email, password };
 
     // We don't want to navigate if there's an error.
     // `unwrap` will throw an error if there is one
@@ -46,21 +47,30 @@ export default function AuthForm() {
       <h1>{authAction}</h1>
       <form onSubmit={attemptAuth}>
         <label>
-          Username
+          Full Name
           <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            autoComplete="username"
+            type='text'
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            autoComplete='fullName'
+          />
+        </label>
+        <label>
+          Email
+          <input
+            type='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete='current-email'
           />
         </label>
         <label>
           Password
           <input
-            type="password"
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
+            autoComplete='current-password'
           />
         </label>
         <button>{authAction}</button>
@@ -68,8 +78,8 @@ export default function AuthForm() {
       <a onClick={() => setIsLogin(!isLogin)}>{altCopy}</a>
 
       {(loginLoading || registerLoading) && <p>Please wait...</p>}
-      {loginError && <p role="alert">{loginError}</p>}
-      {registerError && <p role="alert">{registerError}</p>}
+      {loginError && <p role='alert'>{loginError}</p>}
+      {registerError && <p role='alert'>{registerError}</p>}
     </>
   );
 }
