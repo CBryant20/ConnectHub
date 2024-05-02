@@ -32,19 +32,21 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/:userId", async (req, res, next) => {
   try {
-    const { content, senderId } = req.body;
-    if (!content || !senderId) {
-      return next(new ServerError(400, "Content and senderId are required."));
-    }
-    const senderIdInt = parseInt(senderId, 10);
+    const { content } = req.body;
+    const { userId } = req.params;
 
-    if (isNaN(senderIdInt)) {
-      return next(new ServerError(400, "senderId must be a valid integer."));
+    if (!content || !userId) {
+      return next(new ServerError(400, "Content and userId are required."));
+    }
+    const userIdInt = parseInt(userId, 10);
+
+    if (isNaN(userIdInt)) {
+      return next(new ServerError(400, "userId must be a valid integer."));
     }
     const newMessage = await prisma.message.create({
-      data: { content, senderId: senderIdInt },
+      data: { content, userId: userIdInt },
     });
     res.status(201).json(newMessage);
   } catch (err) {
