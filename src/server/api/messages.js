@@ -22,10 +22,8 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:userId", async (req, res, next) => {
   try {
-    const userId = +req.params.userId;
-
     const messages = await prisma.message.findMany({
-      where: { userId },
+      where: { userId: +res.locals.user.id },
     });
 
     res.json(messages);

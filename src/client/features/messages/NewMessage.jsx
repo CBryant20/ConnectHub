@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useCreateMessageMutation } from "./messageSlice";
 
-export default function NewMessage() {
+export default function NewMessage({ userId }) {
   const [content, setContent] = useState("");
   const [createMessage] = useCreateMessageMutation();
 
   const create = async (evt) => {
     evt.preventDefault();
-    createMessage({ content });
+    createMessage({ userId, content });
   };
 
   return (
