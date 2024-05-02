@@ -21,8 +21,8 @@ model Message {
   id        Int      @id @default(autoincrement())
   content   String
   createdAt DateTime @default(now())
-  sender    User     @relation(fields: [senderId], references: [id])
-  senderId  Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
   likes     Like[]
 }
 

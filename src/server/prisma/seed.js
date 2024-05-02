@@ -13,7 +13,6 @@ const seed = async () => {
       const randomFullName = `${faker.name.firstName()} ${faker.name.lastName()}`;
       const randomEmail = faker.internet.email();
       const randomPassword = faker.internet.password();
-      const randomIsAdmin = faker.datatype.boolean();
 
       const user = await prisma.user.upsert({
         where: { id: i + 1 },
@@ -22,21 +21,26 @@ const seed = async () => {
           fullName: randomFullName,
           email: randomEmail,
           password: randomPassword,
-          isAdmin: randomIsAdmin,
         },
       });
       storedUserIds.push(user.id);
     }
 
-    // Create messages from users to admin
-    for (const userId of storedUserIds) {
+    // Create users associated with random messages
+    for (let i = 0; i < 20; i++) {
       const randomContent = faker.lorem.sentence();
+      const randomUserIdIndex = Math.floor(
+        Math.random() * storedUserIds.length
+      );
+      const randomUserId = storedUserIds[randomUserIdIndex];
+
       const message = await prisma.message.create({
         data: {
           content: randomContent,
-          senderId: userId,
+          userId: randomUserId,
         },
       });
+
       storedMessageIds.push(message.id);
     }
 

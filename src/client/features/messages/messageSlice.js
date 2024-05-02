@@ -7,12 +7,12 @@ const messagesApi = api.injectEndpoints({
       providesTags: ["Messages"],
     }),
     getMessage: builder.query({
-      query: (id) => `/messages/${id}`,
+      query: (user) => `/messages/${user.id}`,
       providesTags: ["Messages"],
     }),
     createMessage: builder.mutation({
-      query: (message) => ({
-        url: "/messages",
+      query: (user) => ({
+        url: `/messages/${user.id}`,
         method: "POST",
         body: message,
       }),

@@ -6,6 +6,8 @@ PATCH /api/messages/:id: Update an existing message.
 DELETE /api/messages/:id: Delete a message by ID.
 */
 
+// messagesRouter.js
+
 const { ServerError } = require("../errors");
 const prisma = require("../prisma");
 
@@ -20,13 +22,15 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:userId", async (req, res, next) => {
   try {
-    const messageId = +req.params.id;
-    const message = await prisma.message.findUnique({
-      where: { id: messageId },
+    const userId = +req.params.userId;
+
+    const messages = await prisma.message.findMany({
+      where: { senderId: userId },
     });
-    res.json(message);
+
+    res.json(messages);
   } catch (err) {
     next(err);
   }
@@ -40,14 +44,20 @@ router.post("/:userId", async (req, res, next) => {
     if (!content || !userId) {
       return next(new ServerError(400, "Content and userId are required."));
     }
+
     const userIdInt = parseInt(userId, 10);
 
     if (isNaN(userIdInt)) {
       return next(new ServerError(400, "userId must be a valid integer."));
     }
+
+    // Assuming senderId refers to the authenticated user sending the message
+    const senderId = req.user.id; // Assuming you have user information stored in req.user
+
     const newMessage = await prisma.message.create({
-      data: { content, userId: userIdInt },
+      data: { content, senderId, userId: userIdInt }, // Assuming senderId refers to the sender
     });
+
     res.status(201).json(newMessage);
   } catch (err) {
     next(err);

@@ -5,6 +5,8 @@ PATCH /api/users/:id: Update an existing user.
 DELETE /api/users/:id: Delete a user by ID.
 */
 
+// usersRouter.js
+
 const { ServerError } = require("../errors");
 const prisma = require("../prisma");
 
@@ -45,9 +47,12 @@ router.patch("/:id", async (req, res, next) => {
   try {
     const userId = +req.params.id;
     const { fullName, email, password, isAdmin } = req.body;
-    if (!fullName || !email || !password || !isAdmin) {
+    if (!fullName || !email || !password || isAdmin === undefined) {
       return next(
-        new ServerError(400, "Full name, email, and password are required.")
+        new ServerError(
+          400,
+          "Full name, email, password, and isAdmin are required."
+        )
       );
     }
     const updatedUser = await prisma.user.update({
