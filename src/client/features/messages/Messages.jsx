@@ -23,7 +23,7 @@ export default function Messages({}) {
   return (
     <div className='tasks'>
       <h1>Messages</h1>
-      <h2>Send A Message</h2>
+      <h2>Create A New Message</h2>
       <NewMessage userId={userId} />
       {hasMessages && (
         <>

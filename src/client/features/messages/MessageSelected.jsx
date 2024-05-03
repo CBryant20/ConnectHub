@@ -11,7 +11,8 @@ export default function MessageSelected() {
   return (
     <div>
       <p>Message Date: {new Date(message.createdAt).toLocaleString()}</p>
-      <p>Message Content: {message.content}</p>
+      <h3>Message Content:</h3>
+      <p>{message.content}</p>
     </div>
   );
 }

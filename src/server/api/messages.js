@@ -32,17 +32,16 @@ router.get("/user/:userId", async (req, res, next) => {
   }
 });
 
-router.post("/:userId", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const { content } = req.body;
-    const userId = +req.params.userId;
 
     if (!content) {
       return next(new ServerError(400, "Content is required."));
     }
 
     const newMessage = await prisma.message.create({
-      data: { content, user: { connect: { id: userId } } },
+      data: { content, user: { connect: { id: res.locals.user.id } } },
     });
 
     res.status(201).json(newMessage);
