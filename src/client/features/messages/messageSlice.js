@@ -10,17 +10,6 @@ const messagesApi = api.injectEndpoints({
       query: (userId) => `/messages/user/${userId}`,
       providesTags: ["Messages"],
     }),
-    getMessageSelected: builder.query({
-      query: (message) => {
-        if (!message || !message.id) {
-          throw new Error("Invalid message object");
-        }
-        return {
-          url: `/messages/${message.id}`,
-        };
-      },
-      providesTags: ["Messages"],
-    }),
     createMessage: builder.mutation({
       query: (userId, message) => ({
         url: `/messages/${userId}`,

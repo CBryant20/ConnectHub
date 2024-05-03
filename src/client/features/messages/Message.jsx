@@ -1,17 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {
-  useDeleteMessageMutation,
-  useGetMessageSelectedQuery,
-} from "./messageSlice";
+import { useDeleteMessageMutation } from "./messageSlice";
 
 export default function Message({ message }) {
   const navigate = useNavigate();
   const [isChatOpened, setIsChatOpened] = useState(false);
   const [deleteMessage] = useDeleteMessageMutation();
-  const { data: selectedMessage } = useGetMessageSelectedQuery(
-    isChatOpened ? message.id : null
-  );
 
   const handleDelete = async (evt) => {
     evt.preventDefault();
@@ -21,7 +15,13 @@ export default function Message({ message }) {
   const openChatWindow = async () => {
     if (!isChatOpened) {
       setIsChatOpened(true);
-      navigate(`/messages/${message.id}`);
+      if (message?.id) {
+        navigate(`/messages/${message.id}`, {
+          state: { message },
+        });
+      } else {
+        console.error("Message ID is undefined.");
+      }
     }
   };
 
@@ -33,7 +33,7 @@ export default function Message({ message }) {
           Open Chat
         </button>
         <button onClick={handleDelete}>Delete Message</button>
-        {isChatOpened && <MessageSelected message={selectedMessage} />}
+        {isChatOpened && <MessageSelected message={message.id} />}
       </div>
     </li>
   );

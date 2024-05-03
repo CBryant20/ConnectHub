@@ -32,25 +32,6 @@ router.get("/user/:userId", async (req, res, next) => {
   }
 });
 
-// Retrieve a specific message by ID
-router.get("/:id", async (req, res, next) => {
-  try {
-    const messageId = +req.params.id;
-    console.log(messageId);
-    const message = await prisma.message.findUnique({
-      where: { id: messageId },
-    });
-
-    if (!message) {
-      return res.status(404).json({ error: "Message not found" });
-    }
-
-    res.json(message);
-  } catch (err) {
-    next(err);
-  }
-});
-
 router.post("/:userId", async (req, res, next) => {
   try {
     const { content } = req.body;

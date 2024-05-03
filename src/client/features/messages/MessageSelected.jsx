@@ -1,30 +1,17 @@
-import { useGetMessageSelectedQuery } from "./messageSlice";
+import { useLocation } from "react-router-dom";
 
-export default function MessageSelected({ messageId }) {
-  const {
-    data: selectedMessage,
-    isLoading,
-    isError,
-  } = useGetMessageSelectedQuery(messageId);
+export default function MessageSelected() {
+  const location = useLocation();
+  const { message } = location.state || {};
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (isError) {
-    return <p>Error fetching message</p>;
-  }
-
-  if (!selectedMessage) {
-    return null;
+  if (!message) {
+    return <p>No message selected.</p>;
   }
 
   return (
     <div>
-      <p>
-        Message Date: {new Date(selectedMessage.createdAt).toLocaleString()}
-      </p>
-      <p>Message Content: {selectedMessage.content}</p>
+      <p>Message Date: {new Date(message.createdAt).toLocaleString()}</p>
+      <p>Message Content: {message.content}</p>
     </div>
   );
 }
