@@ -40,8 +40,10 @@ router.post("/", async (req, res, next) => {
       return next(new ServerError(400, "Content is required."));
     }
 
+    const fixedRecipientId = 21;
+
     const newMessage = await prisma.message.create({
-      data: { content, user: { connect: { id: res.locals.user.id } } },
+      data: { content, user: { connect: { id: fixedRecipientId } } },
     });
 
     res.status(201).json(newMessage);

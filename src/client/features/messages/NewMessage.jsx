@@ -1,19 +1,13 @@
 import { useState } from "react";
 import { useCreateMessageMutation } from "./messageSlice";
 
-export default function NewMessage() {
+export default function NewMessage({ fixedRecipientId }) {
   const [content, setContent] = useState("");
   const [createMessage] = useCreateMessageMutation();
 
   const addMessage = async (evt) => {
     evt.preventDefault();
-
-    // if (!userId) {
-    //   console.error("userId is undefined.");
-    //   return;
-    // }
-
-    await createMessage({ content });
+    await createMessage({ userId: fixedRecipientId, content });
     setContent("");
   };
 
