@@ -28,7 +28,7 @@ export default function Message({ message }) {
   return (
     <li>
       <div>
-        <p>Message Date: {new Date(message.createdAt).toLocaleString()}</p>
+        <p>Last Message Date: {new Date(message.createdAt).toLocaleString()}</p>
         <button onClick={openChatWindow} aria-label='open-chat'>
           Open Chat
         </button>

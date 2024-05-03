@@ -13,6 +13,46 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// Gets all messages for the logged in user
+router.get("/:userId", async (req, res, next) => {
+  try {
+    const userId = +res.locals.user.id;
+
+    const messages = await prisma.message.findMany({
+      where: {
+        OR: [{ senderId: userId }, { recipientId: userId }],
+      },
+    });
+    res.json(messages);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Gets conversation between two users, listed by date
+router.get("/conversation/:userId/:user2", async (req, res, next) => {
+  try {
+    const userId = +res.locals.user.id;
+    const fixedRecipientId = 21;
+    const user2 = fixedRecipientId;
+
+    const messages = await prisma.message.findMany({
+      where: {
+        OR: [
+          { senderId: userId, recipientId: user2 },
+          { senderId: user2, recipientId: userId },
+        ],
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+    res.json(messages);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Gets all messages sent by logged in user
 router.get("/sent", async (req, res, next) => {
   try {

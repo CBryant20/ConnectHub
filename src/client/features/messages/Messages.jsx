@@ -3,14 +3,14 @@ import { selectToken } from "../auth/authSlice";
 
 import NewMessage from "./NewMessage";
 import Message from "./Message";
-import { useGetMessageQuery } from "./messageSlice";
+import { useGetMyMessagesQuery } from "./messageSlice";
 
 import "./Messages.scss";
 
 export default function Messages({}) {
   const token = useSelector(selectToken);
   const userId = useSelector((state) => state.auth.userId);
-  const { data: messages, isLoading } = useGetMessageQuery();
+  const { data: messages, isLoading } = useGetMyMessagesQuery();
 
   if (!token) {
     return <p>You must be logged in to see your messages.</p>;
