@@ -13,16 +13,9 @@ export default function Message({ message }) {
     isChatOpened ? message.id : null
   );
 
-  console.log("Message ID:", message.id);
-  console.log("Message User ID:", message.userId);
-
-  const handleDelete = async () => {
-    try {
-      await deleteMessage(message.id);
-      console.log("Message deleted");
-    } catch (error) {
-      console.error("Error deleting message:", error);
-    }
+  const handleDelete = async (evt) => {
+    evt.preventDefault();
+    deleteMessage(message.id);
   };
 
   const openChatWindow = async () => {

@@ -9,6 +9,7 @@ import store from "./store";
 import Home from "./layout/Home.jsx";
 import AuthForm from "./features/auth/AuthForm";
 import Messages from "./features/messages/Messages";
+import MessageSelected from "./features/messages/MessageSelected.jsx";
 import Root from "./layout/Root.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/messages", element: <Messages /> },
+      { path: "/messages/:messageId", element: <MessageSelected /> },
       { path: "/login", element: <AuthForm /> },
     ],
   },
