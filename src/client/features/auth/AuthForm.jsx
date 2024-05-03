@@ -39,7 +39,7 @@ export default function AuthForm() {
       } else {
         await register(credentials2).unwrap();
       }
-      navigate("/");
+      navigate("/messages");
     } catch (err) {
       console.error(err);
     }

@@ -5,13 +5,14 @@ export default function NewMessage({ userId }) {
   const [content, setContent] = useState("");
   const [createMessage] = useCreateMessageMutation();
 
-  const create = async (evt) => {
+  const addMessage = async (evt) => {
     evt.preventDefault();
     createMessage({ userId, content });
+    setContent("");
   };
 
   return (
-    <form onSubmit={create}>
+    <form onSubmit={addMessage}>
       <input
         type='text'
         value={content}

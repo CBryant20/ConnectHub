@@ -15,7 +15,9 @@ export default function Messages({}) {
   if (!token) {
     return <p>You must be logged in to see your messages.</p>;
   }
-
+  if (!messages) {
+    return <p>Loading messages...</p>;
+  }
   const hasMessages = messages && messages.length > 0;
 
   return (
@@ -28,7 +30,7 @@ export default function Messages({}) {
           <h2>Your Messages</h2>
           {isLoading && <p>Loading messages...</p>}
           <ul>
-            {messages.map((message) => (
+            {messages?.map((message) => (
               <Message key={message.id} message={message} />
             ))}
           </ul>

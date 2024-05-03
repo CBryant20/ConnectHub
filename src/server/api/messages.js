@@ -20,13 +20,32 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:userId", async (req, res, next) => {
+router.get("/user/:userId", async (req, res, next) => {
   try {
     const messages = await prisma.message.findMany({
       where: { userId: +res.locals.user.id },
     });
 
     res.json(messages);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Retrieve a specific message by ID
+router.get("/:id", async (req, res, next) => {
+  try {
+    const messageId = +req.params.id;
+    console.log(messageId);
+    const message = await prisma.message.findUnique({
+      where: { id: messageId },
+    });
+
+    if (!message) {
+      return res.status(404).json({ error: "Message not found" });
+    }
+
+    res.json(message);
   } catch (err) {
     next(err);
   }
@@ -42,7 +61,7 @@ router.post("/:userId", async (req, res, next) => {
     }
 
     const newMessage = await prisma.message.create({
-      data: { content, userId },
+      data: { content, user: { connect: { id: userId } } },
     });
 
     res.status(201).json(newMessage);
