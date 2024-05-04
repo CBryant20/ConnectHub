@@ -30,7 +30,7 @@ router.get("/:userId", async (req, res, next) => {
 });
 
 // Gets conversation between two users, listed by date
-router.get("/conversation/:userId/:user2", async (req, res, next) => {
+router.get("/conversation", async (req, res, next) => {
   try {
     const userId = +res.locals.user.id;
     const fixedRecipientId = 21;
@@ -163,7 +163,6 @@ router.patch("/sent/:id", async (req, res, next) => {
 router.delete("/sent/:id", async (req, res, next) => {
   try {
     const messageId = +req.params.id;
-    const userId = res.locals.user.id;
 
     const message = await prisma.message.findUnique({
       where: { id: messageId },
@@ -171,13 +170,6 @@ router.delete("/sent/:id", async (req, res, next) => {
 
     if (!message) {
       return res.status(404).json({ error: "Message not found" });
-    }
-
-    if (message.senderId !== userId) {
-      return res.status(403).json({
-        error:
-          "This message does not belong to you!!! You cannot delete this message.",
-      });
     }
 
     await prisma.message.delete({ where: { id: messageId } });

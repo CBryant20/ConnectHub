@@ -8,6 +8,7 @@ const seed = async () => {
     const storedUserIds = [];
     const storedMessageIds = [];
 
+    // Create Users
     for (let i = 0; i < 20; i++) {
       const randomFullName = `${faker.name.firstName()} ${faker.name.lastName()}`;
       const randomEmail = faker.internet.email();
@@ -25,6 +26,7 @@ const seed = async () => {
 
     const fixedRecipientId = storedUserIds[0];
 
+    // Create Messages
     for (let i = 0; i < 20; i++) {
       const randomContent = faker.lorem.sentence();
       const randomSenderId =
@@ -40,6 +42,25 @@ const seed = async () => {
       storedMessageIds.push(message.id);
     }
 
+    // Create Replies to Messages
+    for (let i = 0; i < 10; i++) {
+      const randomContent = faker.lorem.sentence();
+      const replyToId =
+        storedMessageIds[Math.floor(Math.random() * storedMessageIds.length)];
+      const randomSenderId =
+        storedUserIds[Math.floor(Math.random() * storedUserIds.length)];
+
+      await prisma.message.create({
+        data: {
+          content: randomContent,
+          senderId: randomSenderId,
+          recipientId: fixedRecipientId,
+          replyToId,
+        },
+      });
+    }
+
+    // Create Likes on Messages
     for (const userId of storedUserIds) {
       const messageIdToLike =
         storedMessageIds[Math.floor(Math.random() * storedMessageIds.length)];
