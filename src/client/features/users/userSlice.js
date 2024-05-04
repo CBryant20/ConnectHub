@@ -7,7 +7,7 @@ const usersApi = api.injectEndpoints({
       providesTags: ["Users"],
     }),
     getUserById: builder.query({
-      query: (userId) => `/users/${userId}`,
+      query: (id) => `/users/${id}`,
       providesTags: ["Users"],
     }),
     editUser: builder.mutation({

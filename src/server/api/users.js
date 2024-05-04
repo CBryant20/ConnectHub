@@ -45,19 +45,16 @@ router.get("/:id", async (req, res, next) => {
 
 router.patch("/:id", async (req, res, next) => {
   try {
-    const userId = +req.params.id;
-    const { fullName, email, password, isAdmin } = req.body;
-    if (!fullName || !email || !password || isAdmin === undefined) {
+    const id = +res.locals.user.id;
+    const { fullName, email, password } = req.body;
+    if (!fullName || !email || !password === undefined) {
       return next(
-        new ServerError(
-          400,
-          "Full name, email, password, and isAdmin are required."
-        )
+        new ServerError(400, "Full name, email, and password are required.")
       );
     }
     const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: { fullName, email, password, isAdmin },
+      where: { id },
+      data: { fullName, email, password },
     });
     res.json(updatedUser);
   } catch (err) {
