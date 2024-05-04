@@ -6,8 +6,8 @@ const usersApi = api.injectEndpoints({
       query: () => "/users",
       providesTags: ["Users"],
     }),
-    getUser: builder.query({
-      query: (id) => `/users/${id}`,
+    getUserById: builder.query({
+      query: (userId) => `/users/${userId}`,
       providesTags: ["Users"],
     }),
     editUser: builder.mutation({
@@ -30,7 +30,7 @@ const usersApi = api.injectEndpoints({
 
 export const {
   useGetUsersQuery,
-  useGetUserQuery,
+  useGetUserByIdQuery,
   useEditUserMutation,
   useDeleteUserMutation,
 } = usersApi;

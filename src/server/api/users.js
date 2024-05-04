@@ -1,10 +1,3 @@
-/*
-GET /api/users: Retrieve a list of all users.
-GET /api/users/:id: Retrieve a specific user by ID.
-PATCH /api/users/:id: Update an existing user.
-DELETE /api/users/:id: Delete a user by ID.
-*/
-
 const { ServerError } = require("../errors");
 const prisma = require("../prisma");
 
@@ -30,11 +23,20 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
   try {
-    const id = +req.params.id;
+    const id = +res.locals.user.id;
+
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
     const user = await prisma.user.findUnique({
       where: { id },
       select: { id: true, fullName: true, email: true },
     });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
     res.json(user);
   } catch (err) {
     next(err);
