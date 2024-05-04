@@ -2,41 +2,32 @@ import api from "../../store/api";
 
 const messagesApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    // Get All messages
+    // Get All Messages
     getMessages: builder.query({
       query: () => "/messages",
       providesTags: ["Messages"],
     }),
-    // Gets all messages for the logged in user
+    // Get All Messages for the Logged-In User
     getMyMessages: builder.query({
+      query: () => "/messages/me",
+      providesTags: ["Messages"],
+    }),
+    // Get a Specific Message by ID (with sender information)
+    getMessageById: builder.query({
       query: (id) => `/messages/${id}`,
       providesTags: ["Messages"],
     }),
-    // Gets all messages for the logged in user
+    // Get Conversation Between Two Users
     getConversationMessages: builder.query({
-      query: (userId) => `/messages/conversation/${userId}/21`,
+      query: (userId) => `/messages/conversation/${userId}`,
       providesTags: ["Messages"],
     }),
-    // Get all sent messages
-    getSentMessages: builder.query({
-      query: () => "/messages/sent",
+    // Get Message Thread
+    getMessageThread: builder.query({
+      query: (messageId) => `/messages/thread/${messageId}`,
       providesTags: ["Messages"],
     }),
-    // Get sent message by ID
-    getSentMessageById: builder.query({
-      query: (id) => `/messages/sent/${id}`,
-      providesTags: ["Messages"],
-    }),
-    // Get all received messages
-    getReceivedMessages: builder.query({
-      query: () => "/messages/received",
-      providesTags: ["Messages"],
-    }),
-    // Get received message by ID
-    getReceivedMessageById: builder.query({
-      query: (id) => `/messages/received/${id}`,
-      providesTags: ["Messages"],
-    }),
+    // Create a New Message
     createMessage: builder.mutation({
       query: (content) => ({
         url: "/messages",
@@ -45,14 +36,25 @@ const messagesApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Messages"],
     }),
+    // Create a Reply to a Specific Message
+    createReply: builder.mutation({
+      query: (reply) => ({
+        url: `/messages/reply/${reply.messageId}`,
+        method: "POST",
+        body: { content: reply.content },
+      }),
+      invalidatesTags: ["Messages"],
+    }),
+    // Edit a Sent Message by the Logged-In User
     editMessage: builder.mutation({
       query: (message) => ({
         url: `/messages/sent/${message.id}`,
         method: "PATCH",
-        body: message,
+        body: { content: message.content },
       }),
       invalidatesTags: ["Messages"],
     }),
+    // Delete a Sent Message by the Logged-In User
     deleteMessage: builder.mutation({
       query: (id) => ({
         url: `/messages/sent/${id}`,
@@ -67,11 +69,10 @@ export const {
   useGetMessagesQuery,
   useGetMyMessagesQuery,
   useGetConversationMessagesQuery,
-  useGetSentMessagesQuery,
-  useGetSentMessageByIdQuery,
-  useGetReceivedMessagesQuery,
-  useGetReceivedMessageByIdQuery,
+  useGetMessageThreadQuery,
+  useGetMessageByIdQuery,
   useCreateMessageMutation,
+  useCreateReplyMutation,
   useEditMessageMutation,
   useDeleteMessageMutation,
 } = messagesApi;

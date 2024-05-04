@@ -13,6 +13,49 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/me", async (req, res, next) => {
+  try {
+    const userId = res.locals.user.id;
+
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required." });
+    }
+
+    const messages = await prisma.message.findMany({
+      where: {
+        OR: [{ senderId: userId }, { recipientId: userId }],
+      },
+    });
+
+    res.json(messages);
+  } catch (err) {
+    console.error("Error fetching messages for logged-in user:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Fetch message with sender information
+router.get("/:id", async (req, res, next) => {
+  try {
+    const messageId = parseInt(req.params.id, 10);
+
+    const message = await prisma.message.findUnique({
+      where: { id: messageId },
+      include: {
+        sender: true,
+      },
+    });
+
+    if (!message) {
+      return res.status(404).json({ error: "Message not found." });
+    }
+
+    res.json(message);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Gets all messages for the logged in user
 router.get("/:userId", async (req, res, next) => {
   try {
@@ -124,21 +167,19 @@ router.get("/thread/:messageId", async (req, res, next) => {
 
     const messages = await prisma.message.findMany({
       where: {
-        OR: [
-          { id: messageId }, // The original message
-          { replyToId: messageId }, // All replies to this message
-        ],
+        OR: [{ id: messageId }, { replyToId: messageId }],
       },
-      orderBy: { createdAt: "asc" }, // Sort by creation time
+      orderBy: { createdAt: "asc" },
     });
 
     if (messages.length === 0) {
-      return res.status(404).json({ error: "Message not found" });
+      return res.status(404).json({ error: "Message not found." });
     }
 
     res.json(messages);
   } catch (err) {
-    next(err);
+    console.error("Error fetching message thread:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -172,7 +213,7 @@ router.post("/reply/:messageId", async (req, res, next) => {
   try {
     const { content } = req.body;
     const messageId = parseInt(req.params.messageId, 10);
-    const senderId = res.locals.user.id; // Logged-in user
+    const senderId = res.locals.user.id;
 
     if (!content) {
       return next(new ServerError(400, "Content is required."));
@@ -190,8 +231,8 @@ router.post("/reply/:messageId", async (req, res, next) => {
       data: {
         content,
         senderId,
-        recipientId: originalMessage.senderId, // Reply to the sender
-        replyToId: messageId, // Set the replyToId to reference the original message
+        recipientId: originalMessage.senderId,
+        replyToId: messageId,
       },
     });
 
