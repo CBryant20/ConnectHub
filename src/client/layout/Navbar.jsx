@@ -10,6 +10,7 @@ export default function Navbar() {
   const location = useLocation();
 
   const token = useSelector(selectToken);
+  const currentPath = location.pathname;
 
   const handleLogout = async () => {
     await dispatch(logout());
@@ -20,18 +21,33 @@ export default function Navbar() {
     <nav className='top'>
       <h1>Connect Hub</h1>
       <menu>
-        {location.pathname === "/login" || location.pathname === "/register" ? (
-          <li>
-            <NavLink to='/'>Home</NavLink>
-          </li>
-        ) : location.pathname !== "/" && location.pathname !== "/users" ? (
-          <li>
-            <NavLink to='/users'>My Info</NavLink>
-          </li>
-        ) : location.pathname !== "/messages" && location.pathname !== "/" ? (
-          <li>
-            <NavLink to='/messages'>Messages</NavLink>
-          </li>
+        {currentPath === "/login" || currentPath === "/register" ? (
+          <>
+            <li>
+              <NavLink to='/'>Home</NavLink>
+            </li>
+          </>
+        ) : currentPath === "/users" ? (
+          <>
+            <li>
+              <NavLink to='/messages'>Messages</NavLink>
+            </li>
+          </>
+        ) : currentPath === "/messages" ? (
+          <>
+            <li>
+              <NavLink to='/users'>My Info</NavLink>
+            </li>
+          </>
+        ) : currentPath.startsWith("/messages") ? (
+          <>
+            <li>
+              <NavLink to='/messages'>Messages</NavLink>
+            </li>
+            <li>
+              <NavLink to='/users'>My Info</NavLink>
+            </li>
+          </>
         ) : null}
         {token ? (
           <li>

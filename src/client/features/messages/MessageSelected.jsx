@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   useCreateReplyMutation,
   useGetMessageThreadQuery,
 } from "./messageSlice";
+import { useState } from "react";
+
+import "./MessageSelected.scss";
 
 export default function MessageSelected() {
-  const location = useLocation();
-  const { messageId } = location.state || {};
+  const { state } = useLocation();
+  const { messageId } = state || {};
+
   const [replyContent, setReplyContent] = useState("");
   const [createReply] = useCreateReplyMutation();
 
@@ -16,16 +19,6 @@ export default function MessageSelected() {
     isLoading,
     error,
   } = useGetMessageThreadQuery(messageId);
-
-  useEffect(() => {
-    if (!messageId) {
-      console.error("No message ID provided.");
-    }
-  }, [messageId]);
-
-  if (!messageId) {
-    return <p>No message selected.</p>;
-  }
 
   if (isLoading) {
     return <p>Loading message thread...</p>;
@@ -37,42 +30,51 @@ export default function MessageSelected() {
 
   const handleReply = async (e) => {
     e.preventDefault();
-    if (messageId) {
+    if (messageId && replyContent.trim() !== "") {
       await createReply({ messageId, content: replyContent });
       setReplyContent("");
     }
   };
 
+  console.log("Message ID:", messageId);
+
   return (
-    <div>
-      {thread && thread.length > 0 && (
+    <div className='message-thread'>
+      {thread && thread.length > 0 ? (
         <>
-          <p>Message Date: {new Date(thread[0]?.createdAt).toLocaleString()}</p>
-          <h3>Message Content:</h3>
-          <p>{thread[0]?.content}</p>
+          {thread.map((message) => (
+            <div
+              key={message.id}
+              className={`message ${
+                message.senderId === messageId ? "sent" : "received"
+              }`}
+            >
+              <div
+                className={`message-content ${
+                  message.senderId === messageId ? "align-right" : "align-left"
+                }`}
+              >
+                <strong>{message.sender?.email}</strong>
+                <p>{message.content}</p>
+                <small>{new Date(message.createdAt).toLocaleString()}</small>
+              </div>
+            </div>
+          ))}
 
-          <h3>Replies:</h3>
-          <ul>
-            {thread.slice(1).map((msg) => (
-              <li key={msg.id}>
-                <p>Reply Date: {new Date(msg.createdAt).toLocaleString()}</p>
-                <p>{msg.content}</p>
-              </li>
-            ))}
-          </ul>
+          <form onSubmit={handleReply} className='reply-form'>
+            <input
+              type='text'
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              placeholder='Type your reply here'
+              required
+            />
+            <button type='submit'>Reply</button>
+          </form>
         </>
+      ) : (
+        <p>No messages found.</p>
       )}
-
-      <form onSubmit={handleReply}>
-        <input
-          type='text'
-          value={replyContent}
-          onChange={(e) => setReplyContent(e.target.value)}
-          placeholder='Type your reply here'
-          required
-        />
-        <button type='submit'>Reply</button>
-      </form>
     </div>
   );
 }

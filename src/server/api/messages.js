@@ -13,23 +13,29 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/me", async (req, res, next) => {
+// Get the most recent message from each user (only from/to logged-in user)
+router.get("/most-recent", async (req, res, next) => {
   try {
     const userId = res.locals.user.id;
 
-    if (!userId) {
-      return res.status(400).json({ error: "User ID is required." });
-    }
-
-    const messages = await prisma.message.findMany({
+    const recentMessages = await prisma.message.findMany({
       where: {
         OR: [{ senderId: userId }, { recipientId: userId }],
       },
+      orderBy: [{ senderId: "asc" }, { createdAt: "desc" }],
+      distinct: ["senderId"],
+      include: {
+        sender: {
+          select: {
+            email: true,
+          },
+        },
+      },
     });
 
-    res.json(messages);
+    res.json(recentMessages);
   } catch (err) {
-    console.error("Error fetching messages for logged-in user:", err);
+    console.error("Error fetching most recent messages:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -42,7 +48,11 @@ router.get("/:id", async (req, res, next) => {
     const message = await prisma.message.findUnique({
       where: { id: messageId },
       include: {
-        sender: true,
+        sender: {
+          select: {
+            email: true,
+          },
+        },
       },
     });
 
@@ -88,6 +98,13 @@ router.get("/conversation", async (req, res, next) => {
       },
       orderBy: {
         createdAt: "asc",
+      },
+      include: {
+        sender: {
+          select: {
+            email: true,
+          },
+        },
       },
     });
     res.json(messages);
@@ -160,20 +177,28 @@ router.get("/received/:id", async (req, res, next) => {
   }
 });
 
-// Gets a message thread
+// Fetch the full message thread by `messageId`
 router.get("/thread/:messageId", async (req, res, next) => {
   try {
-    const messageId = parseInt(req.params.messageId, 10);
-
+    const { messageId } = req.params;
     const messages = await prisma.message.findMany({
       where: {
-        OR: [{ id: messageId }, { replyToId: messageId }],
+        OR: [{ id: Number(messageId) }, { replyToId: Number(messageId) }],
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: {
+        createdAt: "asc",
+      },
+      include: {
+        sender: {
+          select: {
+            email: true,
+          },
+        },
+      },
     });
 
-    if (messages.length === 0) {
-      return res.status(404).json({ error: "Message not found." });
+    if (!messages.length) {
+      return res.status(404).json({ error: "Message thread not found." });
     }
 
     res.json(messages);

@@ -1,3 +1,4 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -6,14 +7,13 @@ import "./index.scss";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import User from "./features/users/Users.jsx";
+import Root from "./layout/Root.jsx";
 import Home from "./layout/Home.jsx";
+import User from "./features/users/Users.jsx";
 import AuthForm from "./features/auth/AuthForm";
 import Messages from "./features/messages/Messages";
 import MessageSelected from "./features/messages/MessageSelected.jsx";
-import Root from "./layout/Root.jsx";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",

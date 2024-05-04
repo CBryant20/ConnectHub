@@ -3,7 +3,7 @@ import { selectToken } from "../auth/authSlice";
 
 import NewMessage from "./NewMessage";
 import Message from "./Message";
-import { useGetMyMessagesQuery } from "./messageSlice";
+import { useGetMostRecentMessageQuery } from "./messageSlice";
 
 import "./Messages.scss";
 
@@ -15,7 +15,11 @@ export default function Messages() {
     return <p>You must be logged in to see your messages.</p>;
   }
 
-  const { data: messages, isLoading, error } = useGetMyMessagesQuery(userId);
+  const {
+    data: messages,
+    isLoading,
+    error,
+  } = useGetMostRecentMessageQuery(userId);
 
   if (isLoading) {
     return <p>Loading messages...</p>;

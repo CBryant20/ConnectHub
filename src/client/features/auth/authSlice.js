@@ -48,7 +48,12 @@ const authSlice = createSlice({
     token: sessionStorage.getItem(TOKEN_KEY),
   },
   reducers: {
+    login: (state, action) => {
+      state.userId = action.payload.userId;
+      state.token = action.payload.token;
+    },
     logout: (state) => {
+      state.userId = null;
       state.token = null;
       sessionStorage.removeItem(TOKEN_KEY);
     },
@@ -59,7 +64,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 
 export const selectToken = (state) => state.auth.token;
 

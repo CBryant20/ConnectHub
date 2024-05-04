@@ -7,9 +7,9 @@ const messagesApi = api.injectEndpoints({
       query: () => "/messages",
       providesTags: ["Messages"],
     }),
-    // Get All Messages for the Logged-In User
-    getMyMessages: builder.query({
-      query: () => "/messages/me",
+    // Fetch the most recent message for the logged-in user
+    getMostRecentMessage: builder.query({
+      query: () => "/messages/most-recent",
       providesTags: ["Messages"],
     }),
     // Get a Specific Message by ID (with sender information)
@@ -67,7 +67,7 @@ const messagesApi = api.injectEndpoints({
 
 export const {
   useGetMessagesQuery,
-  useGetMyMessagesQuery,
+  useGetMostRecentMessageQuery,
   useGetConversationMessagesQuery,
   useGetMessageThreadQuery,
   useGetMessageByIdQuery,
