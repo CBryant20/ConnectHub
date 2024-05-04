@@ -5,8 +5,6 @@ PATCH /api/users/:id: Update an existing user.
 DELETE /api/users/:id: Delete a user by ID.
 */
 
-// usersRouter.js
-
 const { ServerError } = require("../errors");
 const prisma = require("../prisma");
 

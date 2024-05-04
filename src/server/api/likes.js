@@ -1,12 +1,10 @@
-// routes/likeRoutes.js
-
 const express = require("express");
 const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-// Get all liked messages
+// Get all liked messages (for admin)
 router.get("/", async (req, res) => {
   try {
     const likedMessages = await prisma.like.findMany({
@@ -23,10 +21,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Post a like to a specific message
+// Post a like to a specific message (with user authentication)
 router.post("/:messageId/like", async (req, res) => {
   const { messageId } = req.params;
-  const { userId } = req.body;
+  const userId = res.locals.user.id;
 
   try {
     const message = await prisma.message.findUnique({
@@ -34,13 +32,6 @@ router.post("/:messageId/like", async (req, res) => {
     });
     if (!message) {
       return res.status(404).json({ error: "Message not found" });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: +userId },
-    });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
     }
 
     const existingLike = await prisma.like.findFirst({
@@ -68,8 +59,9 @@ router.post("/:messageId/like", async (req, res) => {
 });
 
 // Delete a like from a specific message
-router.delete("/:messageId/like/:userId", async (req, res) => {
-  const { messageId, userId } = req.params;
+router.delete("/:messageId/like", async (req, res) => {
+  const { messageId } = req.params;
+  const userId = res.locals.user.id;
 
   try {
     const like = await prisma.like.findFirst({
@@ -88,7 +80,7 @@ router.delete("/:messageId/like/:userId", async (req, res) => {
       },
     });
 
-    res.status(204).json({ message: "Like deleted successfully" });
+    res.sendStatus(204);
   } catch (error) {
     console.error("Error deleting like:", error);
     res.status(500).json({ error: "Internal server error" });

@@ -117,6 +117,31 @@ router.get("/received/:id", async (req, res, next) => {
   }
 });
 
+// Gets a message thread
+router.get("/thread/:messageId", async (req, res, next) => {
+  try {
+    const messageId = parseInt(req.params.messageId, 10);
+
+    const messages = await prisma.message.findMany({
+      where: {
+        OR: [
+          { id: messageId }, // The original message
+          { replyToId: messageId }, // All replies to this message
+        ],
+      },
+      orderBy: { createdAt: "asc" }, // Sort by creation time
+    });
+
+    if (messages.length === 0) {
+      return res.status(404).json({ error: "Message not found" });
+    }
+
+    res.json(messages);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Creates a message from logged in user to me
 router.post("/", async (req, res, next) => {
   try {
@@ -133,6 +158,40 @@ router.post("/", async (req, res, next) => {
         content,
         senderId: +res.locals.user.id,
         recipientId: fixedRecipientId,
+      },
+    });
+
+    res.status(201).json(newMessage);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Creates a reply to a message
+router.post("/reply/:messageId", async (req, res, next) => {
+  try {
+    const { content } = req.body;
+    const messageId = parseInt(req.params.messageId, 10);
+    const senderId = res.locals.user.id; // Logged-in user
+
+    if (!content) {
+      return next(new ServerError(400, "Content is required."));
+    }
+
+    const originalMessage = await prisma.message.findUnique({
+      where: { id: messageId },
+    });
+
+    if (!originalMessage) {
+      return res.status(404).json({ error: "Original message not found" });
+    }
+
+    const newMessage = await prisma.message.create({
+      data: {
+        content,
+        senderId,
+        recipientId: originalMessage.senderId, // Reply to the sender
+        replyToId: messageId, // Set the replyToId to reference the original message
       },
     });
 
