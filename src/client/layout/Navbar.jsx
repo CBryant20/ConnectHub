@@ -24,6 +24,10 @@ export default function Navbar() {
           <li>
             <NavLink to='/'>Home</NavLink>
           </li>
+        ) : location.pathname !== "/" && location.pathname !== "/users" ? (
+          <li>
+            <NavLink to='/users'>My Info</NavLink>
+          </li>
         ) : location.pathname !== "/messages" && location.pathname !== "/" ? (
           <li>
             <NavLink to='/messages'>Messages</NavLink>
