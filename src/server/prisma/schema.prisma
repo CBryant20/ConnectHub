@@ -22,9 +22,9 @@ model Message {
   id          Int       @id @default(autoincrement())
   content     String
   senderId    Int
-  sender      User      @relation("SentMessages", fields: [senderId], references: [id])
+  sender      User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
   recipientId Int
-  recipient   User      @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  recipient   User      @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
   replyToId   Int?
   replyTo     Message?  @relation("MessageReplies", fields: [replyToId], references: [id])
@@ -34,7 +34,7 @@ model Message {
 
 model Like {
   id        Int     @id @default(autoincrement())
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
   messageId Int

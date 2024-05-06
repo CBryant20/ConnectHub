@@ -10,13 +10,15 @@ export default function User() {
   const [userData, setUserData] = useState({
     fullName: "",
     email: "",
+    password: "",
   });
 
   useEffect(() => {
     if (user) {
       setUserData({
-        fullName: user.fullName,
-        email: user.email,
+        fullName: user.fullName || "",
+        email: user.email || "",
+        password: user.password || "",
       });
     }
   }, [user]);
@@ -28,8 +30,10 @@ export default function User() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await editUser({ id: user.id, ...userData });
-    setEditMode(false);
+    if (user?.id) {
+      await editUser({ id: user.id, data: userData });
+      setEditMode(false);
+    }
   };
 
   if (isLoading) {
@@ -59,6 +63,7 @@ export default function User() {
               <input
                 type='text'
                 name='fullName'
+                placeholder='First Name Last Name'
                 value={userData.fullName}
                 onChange={handleChange}
                 required
@@ -77,17 +82,18 @@ export default function User() {
             <div>
               <label htmlFor='password'>Password:</label>
               <input
-                type='test'
+                type='password'
                 name='password'
                 value={userData.password}
                 onChange={handleChange}
+                autoComplete='current-password'
                 required
               />
             </div>
             <button type='submit'>Save Changes</button>
             <button type='button' onClick={() => setEditMode(false)}>
               Cancel
-            </button>{" "}
+            </button>
           </form>
         </section>
       ) : (

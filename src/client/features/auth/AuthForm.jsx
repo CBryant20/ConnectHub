@@ -49,6 +49,7 @@ export default function AuthForm() {
     try {
       await changePassword({
         fullName: newFullName,
+        newEmail,
         newPassword,
       }).unwrap();
     } catch (err) {
@@ -65,6 +66,7 @@ export default function AuthForm() {
             Full Name
             <input
               type='text'
+              placeholder='First Name Last Name'
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               autoComplete='fullName'
@@ -116,15 +118,26 @@ export default function AuthForm() {
               Full Name
               <input
                 type='text'
+                placeholder='First name Last name'
                 value={newFullName}
                 onChange={(e) => setNewFullName(e.target.value)}
                 autoComplete='fullName'
               />
             </label>
             <label>
+              Email
+              <input
+                type='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete='current-email'
+              />
+            </label>
+            <label>
               New Password
               <input
                 type='password'
+                placeholder='Enter new password'
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
