@@ -13,7 +13,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// Get the most recent message from each user (only from/to logged-in user)
+// Get the most recent message from each user (for the logged-in user)
 router.get("/most-recent", async (req, res, next) => {
   try {
     const userId = res.locals.user.id;
@@ -22,12 +22,12 @@ router.get("/most-recent", async (req, res, next) => {
       where: {
         OR: [{ senderId: userId }, { recipientId: userId }],
       },
-      orderBy: [{ senderId: "asc" }, { createdAt: "desc" }],
+      orderBy: [{ createdAt: "desc" }],
       distinct: ["senderId"],
       include: {
         sender: {
           select: {
-            email: true,
+            fullName: true,
           },
         },
       },
@@ -37,6 +37,41 @@ router.get("/most-recent", async (req, res, next) => {
   } catch (err) {
     console.error("Error fetching most recent messages:", err);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Fetch only get the top-level messages
+router.get("/original-messages", async (req, res, next) => {
+  try {
+    const userId = res.locals.user.id;
+
+    const messages = await prisma.message.findMany({
+      where: {
+        AND: [
+          {
+            OR: [{ senderId: userId }, { recipientId: userId }],
+          },
+          {
+            replyToId: null,
+          },
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        sender: {
+          select: {
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    res.json(messages);
+  } catch (err) {
+    next(err);
   }
 });
 
@@ -50,6 +85,7 @@ router.get("/:id", async (req, res, next) => {
       include: {
         sender: {
           select: {
+            fullName: true,
             email: true,
           },
         },
@@ -102,6 +138,7 @@ router.get("/conversation", async (req, res, next) => {
       include: {
         sender: {
           select: {
+            fullName: true,
             email: true,
           },
         },
@@ -177,13 +214,13 @@ router.get("/received/:id", async (req, res, next) => {
   }
 });
 
-// Fetch the full message thread by `messageId`
 router.get("/thread/:messageId", async (req, res, next) => {
   try {
-    const { messageId } = req.params;
+    const messageId = parseInt(req.params.messageId, 10);
+
     const messages = await prisma.message.findMany({
       where: {
-        OR: [{ id: Number(messageId) }, { replyToId: Number(messageId) }],
+        OR: [{ id: messageId }, { replyToId: messageId }],
       },
       orderBy: {
         createdAt: "asc",
@@ -191,7 +228,8 @@ router.get("/thread/:messageId", async (req, res, next) => {
       include: {
         sender: {
           select: {
-            email: true,
+            fullName: true,
+            id: true,
           },
         },
       },
@@ -256,7 +294,7 @@ router.post("/reply/:messageId", async (req, res, next) => {
       data: {
         content,
         senderId,
-        recipientId: originalMessage.senderId,
+        recipientId: 21,
         replyToId: messageId,
       },
     });

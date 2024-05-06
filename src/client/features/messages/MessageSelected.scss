@@ -26,11 +26,13 @@ $border-radius: 10px;
     word-wrap: break-word;
 
     &.align-left {
+      align-self: flex-start;
       text-align: left;
       background-color: #a3df81;
     }
 
     &.align-right {
+      align-self: flex-end;
       text-align: right;
       background-color: #5aa1db;
     }

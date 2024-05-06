@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
 import { selectToken } from "../auth/authSlice";
-
 import NewMessage from "./NewMessage";
 import Message from "./Message";
-import { useGetMostRecentMessageQuery } from "./messageSlice";
+import { useGetOriginalMessagesQuery } from "./messageSlice";
 
 import "./Messages.scss";
 
@@ -15,11 +14,7 @@ export default function Messages() {
     return <p>You must be logged in to see your messages.</p>;
   }
 
-  const {
-    data: messages,
-    isLoading,
-    error,
-  } = useGetMostRecentMessageQuery(userId);
+  const { data: messages, isLoading, error } = useGetOriginalMessagesQuery();
 
   if (isLoading) {
     return <p>Loading messages...</p>;
@@ -32,16 +27,20 @@ export default function Messages() {
   const hasMessages = messages && messages.length > 0;
 
   return (
-    <div className='tasks'>
+    <div className='messages'>
+      {" "}
       <h1>Messages</h1>
       <h2>Create A New Message</h2>
-      <NewMessage userId={userId} />
+      <NewMessage userId={userId} />{" "}
       {hasMessages ? (
         <>
           <h2>Your Messages</h2>
           <ul>
             {messages.map((message) => (
-              <Message key={message.id} message={message} />
+              <li key={message.id}>
+                {" "}
+                <Message message={message} />
+              </li>
             ))}
           </ul>
         </>

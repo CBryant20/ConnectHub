@@ -23,16 +23,16 @@ export default function Message({ message }) {
   };
 
   return (
-    <li>
+    <>
       <div>
-        <h3>Message sent by: {message.sender?.email}</h3>
+        <h3>Message sent by: {message.sender.fullName}</h3>
         <p>Last Message Date: {new Date(message.createdAt).toLocaleString()}</p>
         <button onClick={openChatWindow} aria-label='open-chat'>
           Open Chat
         </button>
         <button onClick={handleDelete}>Delete Message</button>
-        {isChatOpened && <MessageSelected />}
       </div>
-    </li>
+      {isChatOpened && <MessageSelected />}
+    </>
   );
 }

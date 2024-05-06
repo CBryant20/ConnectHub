@@ -36,8 +36,6 @@ export default function MessageSelected() {
     }
   };
 
-  console.log("Message ID:", messageId);
-
   return (
     <div className='message-thread'>
       {thread && thread.length > 0 ? (
@@ -46,22 +44,25 @@ export default function MessageSelected() {
             <div
               key={message.id}
               className={`message ${
-                message.senderId === messageId ? "sent" : "received"
+                message.senderId === 21 ? "sent" : "received"
               }`}
             >
               <div
                 className={`message-content ${
-                  message.senderId === messageId ? "align-right" : "align-left"
+                  message.senderId === 21 ? "align-right" : "align-left"
                 }`}
               >
-                <strong>{message.sender?.email}</strong>
+                <strong>{message.sender.fullName}</strong>
                 <p>{message.content}</p>
-                <small>{new Date(message.createdAt).toLocaleString()}</small>
+                <small>
+                  {new Date(message.createdAt).toLocaleString()}
+                </small>{" "}
               </div>
             </div>
           ))}
 
           <form onSubmit={handleReply} className='reply-form'>
+            {" "}
             <input
               type='text'
               value={replyContent}

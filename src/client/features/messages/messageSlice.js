@@ -27,6 +27,11 @@ const messagesApi = api.injectEndpoints({
       query: (messageId) => `/messages/thread/${messageId}`,
       providesTags: ["Messages"],
     }),
+    // Fetch Original messages
+    getOriginalMessages: builder.query({
+      query: () => "/messages/original-messages",
+      providesTags: ["Messages"],
+    }),
     // Create a New Message
     createMessage: builder.mutation({
       query: (content) => ({
@@ -71,6 +76,7 @@ export const {
   useGetConversationMessagesQuery,
   useGetMessageThreadQuery,
   useGetMessageByIdQuery,
+  useGetOriginalMessagesQuery,
   useCreateMessageMutation,
   useCreateReplyMutation,
   useEditMessageMutation,
