@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import {
   useCreateReplyMutation,
   useGetMessageThreadQuery,
+  useDeleteMessageMutation,
 } from "./messageSlice";
 import { useState } from "react";
 
@@ -13,6 +14,7 @@ export default function MessageSelected() {
 
   const [replyContent, setReplyContent] = useState("");
   const [createReply] = useCreateReplyMutation();
+  const [deleteMessage] = useDeleteMessageMutation();
 
   const {
     data: thread,
@@ -36,6 +38,10 @@ export default function MessageSelected() {
     }
   };
 
+  const handleDelete = async (messageId) => {
+    await deleteMessage(messageId);
+  };
+
   return (
     <div className='message-thread'>
       {thread && thread.length > 0 ? (
@@ -44,25 +50,28 @@ export default function MessageSelected() {
             <div
               key={message.id}
               className={`message ${
-                message.senderId === 21 ? "sent" : "received"
+                message.senderId === 21 ? "received" : "sent"
               }`}
             >
               <div
                 className={`message-content ${
-                  message.senderId === 21 ? "align-right" : "align-left"
+                  message.senderId === 21 ? "align-left" : "align-right"
                 }`}
               >
                 <strong>{message.sender.fullName}</strong>
                 <p>{message.content}</p>
-                <small>
-                  {new Date(message.createdAt).toLocaleString()}
-                </small>{" "}
+                <small>{new Date(message.createdAt).toLocaleString()}</small>
+
+                {message.senderId !== 21 && (
+                  <button onClick={() => handleDelete(message.id)}>
+                    Delete
+                  </button>
+                )}
               </div>
             </div>
           ))}
 
           <form onSubmit={handleReply} className='reply-form'>
-            {" "}
             <input
               type='text'
               value={replyContent}

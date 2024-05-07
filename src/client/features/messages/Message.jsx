@@ -17,9 +17,8 @@ export default function Message({ message }) {
     }
   };
 
-  const handleDelete = async (evt) => {
-    evt.preventDefault();
-    deleteMessage(message.id);
+  const handleDelete = async (messageId) => {
+    deleteMessage(messageId);
   };
 
   return (
@@ -30,7 +29,9 @@ export default function Message({ message }) {
         <button onClick={openChatWindow} aria-label='open-chat'>
           Open Chat
         </button>
-        <button onClick={handleDelete}>Delete Message</button>
+        {message.senderId === 21 && (
+          <button onClick={() => handleDelete(message.id)}>Delete</button>
+        )}
       </div>
       {isChatOpened && <MessageSelected />}
     </>
