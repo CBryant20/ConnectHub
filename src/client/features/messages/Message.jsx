@@ -25,7 +25,13 @@ export default function Message({ message }) {
     <>
       <div>
         <h3>Message sent by: {message.sender.fullName}</h3>
-        <p>Last Message Date: {new Date(message.createdAt).toLocaleString()}</p>
+        <p>
+          Last Message Date:{" "}
+          {new Date(message.createdAt).toLocaleString(undefined, {
+            timeStyle: "short",
+            dateStyle: "short",
+          })}
+        </p>
         <button onClick={openChatWindow} aria-label='open-chat'>
           Open Chat
         </button>

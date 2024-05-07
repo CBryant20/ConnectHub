@@ -10,7 +10,7 @@ const likesApi = api.injectEndpoints({
       query: (message) => ({
         url: `/likes/${message.id}/like`,
         method: "POST",
-        body: userID,
+        body: { userID },
       }),
       invalidatesTags: ["Likes"],
     }),

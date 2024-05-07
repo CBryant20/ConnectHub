@@ -5,7 +5,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // Get all liked messages (for admin)
-router.get("/", async (req, res) => {
+router.get("/like", async (req, res) => {
   try {
     const likedMessages = await prisma.like.findMany({
       include: {
@@ -28,7 +28,7 @@ router.post("/:messageId/like", async (req, res) => {
 
   try {
     const message = await prisma.message.findUnique({
-      where: { id: parseInt(messageId) },
+      where: { id: +messageId },
     });
     if (!message) {
       return res.status(404).json({ error: "Message not found" });

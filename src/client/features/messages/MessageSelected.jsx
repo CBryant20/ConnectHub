@@ -60,7 +60,12 @@ export default function MessageSelected() {
               >
                 <strong>{message.sender.fullName}</strong>
                 <p>{message.content}</p>
-                <small>{new Date(message.createdAt).toLocaleString()}</small>
+                <small>
+                  {new Date(message.createdAt).toLocaleString(undefined, {
+                    timeStyle: "short",
+                    dateStyle: "short",
+                  })}
+                </small>
 
                 {message.senderId !== 21 && (
                   <button onClick={() => handleDelete(message.id)}>
