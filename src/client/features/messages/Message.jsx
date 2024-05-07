@@ -24,9 +24,8 @@ export default function Message({ message }) {
   return (
     <>
       <div>
-        <h3>Message sent by: {message.sender.fullName}</h3>
+        <h3>Chat started by: {message.sender.fullName}</h3>
         <p>
-          Last Message Date:{" "}
           {new Date(message.createdAt).toLocaleString(undefined, {
             timeStyle: "short",
             dateStyle: "short",

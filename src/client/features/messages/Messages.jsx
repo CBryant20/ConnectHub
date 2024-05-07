@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectToken } from "../auth/authSlice";
+
 import NewMessage from "./NewMessage";
 import Message from "./Message";
 import { useGetOriginalMessagesQuery } from "./messageSlice";
@@ -7,12 +7,7 @@ import { useGetOriginalMessagesQuery } from "./messageSlice";
 import "./Messages.scss";
 
 export default function Messages() {
-  const token = useSelector(selectToken);
   const userId = useSelector((state) => state.auth.userId);
-
-  if (!token) {
-    return <p>You must be logged in to see your messages.</p>;
-  }
 
   const { data: messages, isLoading, error } = useGetOriginalMessagesQuery();
 
