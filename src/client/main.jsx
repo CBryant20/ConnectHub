@@ -9,7 +9,7 @@ import store from "./store";
 
 import Root from "./layout/Root.jsx";
 import Home from "./layout/Home.jsx";
-import User from "./features/users/Users.jsx";
+import User from "./features/users/User.jsx";
 import AuthForm from "./features/auth/AuthForm";
 import Messages from "./features/messages/Messages";
 import MessageSelected from "./features/messages/MessageSelected.jsx";

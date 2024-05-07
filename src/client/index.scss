@@ -29,11 +29,23 @@ menu {
 
 a {
   text-decoration: none;
-  color: $link-color;
-  cursor: pointer;
+  color: beige;
 
-  &:hover {
-    text-decoration: underline;
-    color: $link-color-hover;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: beige;
+    transition: width 0.5s;
+  }
+
+  &:hover::after {
+    width: 100%;
   }
 }

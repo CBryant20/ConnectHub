@@ -20,7 +20,7 @@ export default function Navbar() {
   return (
     <nav className='top'>
       <h1>Connect Hub</h1>
-      <menu>
+      <menu className='nav-button'>
         {currentPath === "/login" || currentPath === "/register" ? (
           <>
             <li>

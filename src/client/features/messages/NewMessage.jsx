@@ -15,6 +15,7 @@ export default function NewMessage() {
     <form onSubmit={addMessage}>
       <input
         type='text'
+        placeholder='Tell me whats on your mind!'
         value={content}
         onChange={(e) => setContent(e.target.value)}
         required

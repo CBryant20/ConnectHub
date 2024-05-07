@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useGetUserByIdQuery, useEditUserMutation } from "./userSlice";
 
+import "./User.scss";
+
 export default function User() {
   const { data: user, isLoading, error } = useGetUserByIdQuery();
   const [editUser, { isLoading: isSaving, isSuccess, isError }] =
@@ -51,14 +53,14 @@ export default function User() {
   return (
     <div className='user-info'>
       {isEditMode ? (
-        <section>
-          <h1>Edit User Info</h1>
+        <section className='edit-user'>
+          <h1>Edit My Info</h1>
           {isSaving && <p>Saving changes...</p>}
           {isSuccess && <p>Changes saved successfully!</p>}
           {isError && <p>Failed to save changes. Please try again later.</p>}
 
-          <form onSubmit={handleSubmit}>
-            <div>
+          <form className='user-form' onSubmit={handleSubmit}>
+            <div className='form-group'>
               <label htmlFor='fullName'>Full Name:</label>
               <input
                 type='text'
@@ -69,7 +71,7 @@ export default function User() {
                 required
               />
             </div>
-            <div>
+            <div className='form-group'>
               <label htmlFor='email'>Email:</label>
               <input
                 type='email'
@@ -79,33 +81,35 @@ export default function User() {
                 required
               />
             </div>
-            <div>
+            <div className='form-group'>
               <label htmlFor='password'>Password:</label>
               <input
                 type='password'
                 name='password'
+                autoComplete='current-password'
                 value={userData.password}
                 onChange={handleChange}
-                autoComplete='current-password'
                 required
               />
             </div>
-            <button type='submit'>Save Changes</button>
-            <button type='button' onClick={() => setEditMode(false)}>
-              Cancel
-            </button>
+            <div className='form-buttons'>
+              <button type='submit'>Save Changes</button>
+              <button type='button' onClick={() => setEditMode(false)}>
+                Cancel
+              </button>
+            </div>
           </form>
         </section>
       ) : (
-        <section>
-          <h1>User Info</h1>
+        <section className='user-details'>
+          <h1>My Info</h1>
           <p>
             <strong>Name:</strong> {user.fullName}
           </p>
           <p>
             <strong>Email:</strong> {user.email}
           </p>
-          <button onClick={() => setEditMode(true)}>Change Info</button>{" "}
+          <button onClick={() => setEditMode(true)}>Change Info</button>
         </section>
       )}
     </div>
