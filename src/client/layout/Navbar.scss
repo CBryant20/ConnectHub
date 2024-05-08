@@ -1,3 +1,4 @@
+// SCSS code for Navbar
 $primary-color-nav: #2d597e;
 $hover-color: #4169e1;
 $background-color: #f0f8ff;
@@ -9,7 +10,6 @@ nav.top {
   justify-content: space-between;
   align-items: center;
   padding: 0.5em;
-
   border-bottom: 2px solid #aaa;
 
   h1 {
@@ -19,8 +19,33 @@ nav.top {
   .nav-button {
     display: flex;
     gap: 1ch;
-    color: beige;
-
     list-style: none;
+
+    li {
+      position: relative;
+      text-decoration: none;
+      color: beige;
+
+      a {
+        text-decoration: none;
+        color: beige;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 2px;
+          background-color: beige;
+          transition: width 0.5s;
+        }
+
+        &:hover::after {
+          width: 100%;
+        }
+      }
+    }
   }
 }

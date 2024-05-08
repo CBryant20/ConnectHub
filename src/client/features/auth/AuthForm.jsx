@@ -6,7 +6,7 @@ import {
   useChangePasswordMutation,
 } from "./authSlice";
 
-import "./AuthForm.scss"; // Import the SCSS file
+import "./AuthForm.scss";
 
 export default function AuthForm() {
   const navigate = useNavigate();
@@ -59,6 +59,11 @@ export default function AuthForm() {
     }
   };
 
+  const handleToggleLogin = () => {
+    setIsLogin(!isLogin);
+    setShowChangePassword(false);
+  };
+
   return (
     <div className='auth-form'>
       <h1>{isLogin ? "Login" : "Register"}</h1>
@@ -72,7 +77,6 @@ export default function AuthForm() {
                 placeholder='First Name Last Name'
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                autoComplete='fullName'
               />
             </label>
           </div>
@@ -84,7 +88,6 @@ export default function AuthForm() {
               type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              autoComplete='current-email'
             />
           </label>
         </div>
@@ -95,7 +98,6 @@ export default function AuthForm() {
               type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              autoComplete='current-password'
             />
           </label>
         </div>
@@ -103,7 +105,7 @@ export default function AuthForm() {
           {isLogin ? "Login" : "Register"}
         </button>
       </form>
-      <a className='auth-toggle' onClick={() => setIsLogin(!isLogin)}>
+      <a className='auth-toggle' onClick={handleToggleLogin}>
         {isLogin ? "Register here" : "Login here"}
       </a>
       {(loginLoading || registerLoading || changePasswordLoading) && (
@@ -120,8 +122,8 @@ export default function AuthForm() {
         </p>
       )}
       {changePasswordError && (
-        <p className='auth-error' role='alert'>
-          {changePasswordError.message}
+        <p class='auth-error' role='alert'>
+          {changePasswordError}
         </p>
       )}
       {isLogin && (
@@ -141,17 +143,6 @@ export default function AuthForm() {
                   placeholder='First name Last name'
                   value={newFullName}
                   onChange={(e) => setNewFullName(e.target.value)}
-                  autoComplete='fullName'
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Email
-                <input
-                  type='email'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                 />
               </label>
             </div>
@@ -160,7 +151,6 @@ export default function AuthForm() {
                 New Password
                 <input
                   type='password'
-                  placeholder='Enter new password'
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
@@ -170,9 +160,6 @@ export default function AuthForm() {
               Change Password
             </button>
           </form>
-          {changePasswordLoading && (
-            <p className='auth-loading'>Please wait...</p>
-          )}
         </div>
       )}
     </div>

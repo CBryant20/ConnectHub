@@ -6,7 +6,6 @@ $border-color: #ccc;
 $light-gray: #f2f2f2;
 $border-radius: 0.5em;
 
-// Button styling
 .button {
   padding: 8px 16px;
   background: $primary-color;
@@ -32,12 +31,14 @@ $border-radius: 0.5em;
   h1 {
     text-align: center;
     color: $primary-color;
+    text-decoration: none;
   }
 
   .auth-main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
     label {
       margin-bottom: 1rem;
@@ -58,8 +59,22 @@ $border-radius: 0.5em;
     text-align: center;
     cursor: pointer;
 
-    &:hover {
-      text-decoration: underline;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background-color: $primary-color;
+      transition: width 0.5s;
+    }
+
+    &:hover::after {
+      width: 15%;
     }
   }
 
