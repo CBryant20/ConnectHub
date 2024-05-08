@@ -1,9 +1,14 @@
+import "./Home.scss";
+
 export default function Home() {
   return (
     <>
-      <center>
-        <h1>Welcome To Your Connect Hub!!!</h1>
-      </center>
+      <div className='home'>
+        <h1 className='main-title'>Welcome To My Connect Hub!!!</h1>
+        <section className='main-image'>
+          <img src='src/client/layout/Phone.png' alt='phone' />
+        </section>
+      </div>
     </>
   );
 }

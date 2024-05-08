@@ -53,11 +53,11 @@ export default function Navbar() {
           <li>
             <a onClick={handleLogout}>Log Out</a>
           </li>
-        ) : (
+        ) : currentPath !== "/login" && currentPath !== "/register" ? (
           <li>
-            <NavLink to='/login'>Log In / Register</NavLink>
+            <NavLink to='/login'>Log In</NavLink>
           </li>
-        )}
+        ) : null}
       </menu>
     </nav>
   );

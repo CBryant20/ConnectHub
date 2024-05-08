@@ -1,3 +1,9 @@
+$primary-color-nav: #2d597e;
+$hover-color: #4169e1;
+$background-color: #f0f8ff;
+$text-color: #333;
+$border-color: #ccc;
+
 nav.top {
   display: flex;
   justify-content: space-between;
@@ -5,6 +11,10 @@ nav.top {
   padding: 0.5em;
 
   border-bottom: 2px solid #aaa;
+
+  h1 {
+    color: $primary-color-nav;
+  }
 
   .nav-button {
     display: flex;
