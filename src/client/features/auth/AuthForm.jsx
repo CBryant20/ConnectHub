@@ -6,6 +6,8 @@ import {
   useChangePasswordMutation,
 } from "./authSlice";
 
+import "./AuthForm.scss"; // Import the SCSS file
+
 export default function AuthForm() {
   const navigate = useNavigate();
 
@@ -58,95 +60,121 @@ export default function AuthForm() {
   };
 
   return (
-    <>
+    <div className='auth-form'>
       <h1>{isLogin ? "Login" : "Register"}</h1>
-      <form onSubmit={handleAuthAction}>
+      <form className='auth-main' onSubmit={handleAuthAction}>
         {!isLogin && (
-          <label>
-            Full Name
-            <input
-              type='text'
-              placeholder='First Name Last Name'
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              autoComplete='fullName'
-            />
-          </label>
-        )}
-        <label>
-          Email
-          <input
-            type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete='current-email'
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete='current-password'
-          />
-        </label>
-        <button type='submit'>{isLogin ? "Login" : "Register"}</button>
-      </form>
-      <a onClick={() => setIsLogin(!isLogin)}>
-        {isLogin ? "Register here" : "Login here"}
-      </a>
-
-      {(loginLoading || registerLoading || changePasswordLoading) && (
-        <p>Please wait...</p>
-      )}
-      {loginError && <p role='alert'>{loginError}</p>}
-      {registerError && <p role='alert'>{registerError}</p>}
-      {changePasswordError && <p role='alert'>{changePasswordError.message}</p>}
-
-      {isLogin && (
-        <button onClick={() => setShowChangePassword(true)}>
-          Forgot Password?
-        </button>
-      )}
-
-      {showChangePassword && (
-        <>
-          <h2>Change Password</h2>
-          <form onSubmit={handleChangePassword}>
+          <div>
             <label>
               Full Name
               <input
                 type='text'
-                placeholder='First name Last name'
-                value={newFullName}
-                onChange={(e) => setNewFullName(e.target.value)}
+                placeholder='First Name Last Name'
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 autoComplete='fullName'
               />
             </label>
-            <label>
-              Email
-              <input
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoComplete='current-email'
-              />
-            </label>
-            <label>
-              New Password
-              <input
-                type='password'
-                placeholder='Enter new password'
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-            </label>
-            <button type='submit'>Change Password</button>
-          </form>
-          {changePasswordLoading && <p>Please wait...</p>}
-        </>
+          </div>
+        )}
+        <div>
+          <label>
+            Email
+            <input
+              type='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete='current-email'
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Password
+            <input
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete='current-password'
+            />
+          </label>
+        </div>
+        <button className='button' type='submit'>
+          {isLogin ? "Login" : "Register"}
+        </button>
+      </form>
+      <a className='auth-toggle' onClick={() => setIsLogin(!isLogin)}>
+        {isLogin ? "Register here" : "Login here"}
+      </a>
+      {(loginLoading || registerLoading || changePasswordLoading) && (
+        <p className='auth-loading'>Please wait...</p>
       )}
-    </>
+      {loginError && (
+        <p className='auth-error' role='alert'>
+          {loginError}
+        </p>
+      )}
+      {registerError && (
+        <p className='auth-error' role='alert'>
+          {registerError}
+        </p>
+      )}
+      {changePasswordError && (
+        <p className='auth-error' role='alert'>
+          {changePasswordError.message}
+        </p>
+      )}
+      {isLogin && (
+        <button className='button' onClick={() => setShowChangePassword(true)}>
+          Forgot Password?
+        </button>
+      )}
+      {showChangePassword && (
+        <div className='auth-change-password'>
+          <h2>Change Password</h2>
+          <form className='auth-change' onSubmit={handleChangePassword}>
+            <div>
+              <label>
+                Full Name
+                <input
+                  type='text'
+                  placeholder='First name Last name'
+                  value={newFullName}
+                  onChange={(e) => setNewFullName(e.target.value)}
+                  autoComplete='fullName'
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Email
+                <input
+                  type='email'
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                New Password
+                <input
+                  type='password'
+                  placeholder='Enter new password'
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </label>
+            </div>
+            <button className='button' type='submit'>
+              Change Password
+            </button>
+          </form>
+          {changePasswordLoading && (
+            <p className='auth-loading'>Please wait...</p>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
