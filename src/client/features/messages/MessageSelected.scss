@@ -1,8 +1,13 @@
-$message-padding: 10px;
-$border-radius: 10px;
+$primary-color: #4682b4;
+$hover-color: #4169e1;
+$background-color: #f0f8ff;
+$text-color: #333;
+$border-color: #ccc;
+$message-padding: 1.2em;
+$border-radius: 1.2em;
 
 .message-thread {
-  padding: 20px;
+  padding: 3em;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -11,7 +16,7 @@ $border-radius: 10px;
 
 .message {
   display: flex;
-  margin: 10px 0;
+  margin: 0.6em 0;
   transition: all 0.3s ease;
 
   &.sent {
@@ -32,16 +37,41 @@ $border-radius: 10px;
       align-self: flex-start;
       text-align: left;
       background-color: #a3df81;
+
+      &:hover {
+        box-shadow: 0 0.3em 0.6em rgba(0, 0, 0, 0.2);
+      }
     }
 
     &.align-right {
       align-self: flex-end;
       text-align: right;
       background-color: #5aa1db;
+
+      &:hover {
+        box-shadow: 0 0.3em 0.6em rgba(0, 0, 0, 0.2);
+      }
     }
 
     small {
       display: block;
+    }
+
+    button {
+      margin: 0.6em;
+      padding: 0.2em 0.3em;
+      background: $primary-color;
+      color: white;
+      border-radius: 0.3em;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+      display: inline-block;
+
+      &:hover {
+        background: $hover-color;
+        box-shadow: 0 0.3em 0.6em rgba(0, 0, 0, 0.2);
+      }
     }
   }
 }

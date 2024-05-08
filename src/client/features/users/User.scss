@@ -44,11 +44,11 @@ $border-color: #ccc;
         justify-content: center;
 
         button {
-          margin: 10px;
-          padding: 8px 16px;
+          margin: 0.6em;
+          padding: 0.2em 0.3em;
           background: $primary-color;
           color: white;
-          border-radius: 5px;
+          border-radius: 0.3em;
           border: none;
           cursor: pointer;
           transition: background 0.3s, box-shadow 0.3s;
@@ -56,7 +56,7 @@ $border-color: #ccc;
 
           &:hover {
             background: $hover-color;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0.3em 0.6em rgba(0, 0, 0, 0.2);
           }
         }
       }
