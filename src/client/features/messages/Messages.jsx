@@ -23,19 +23,23 @@ export default function Messages() {
 
   return (
     <div className='messages'>
-      <h1>Messages</h1>
       {hasMessages ? (
         <>
-          <h2>Your Messages</h2>
-          <ul>
-            {messages.map((message) => (
-              <li className='message-chat' key={message.id}>
-                <Message message={message} />
-              </li>
-            ))}
-          </ul>
-          <h2>Create A New Message</h2>
-          <NewMessage userId={userId} />
+          <div className='message-section'>
+            <h1>Messages</h1>
+
+            <ul>
+              {messages.map((message) => (
+                <li className='message-chat' key={message.id}>
+                  <Message message={message} />
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className='new-message'>
+            <h2>Create A New Message</h2>
+            <NewMessage userId={userId} />
+          </div>
         </>
       ) : (
         <p>You have no messages.</p>
