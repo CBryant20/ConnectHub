@@ -21,6 +21,8 @@ export default function Navbar() {
   };
 
   const handleLogout = async () => {
+    console.log("Logout button clicked");
+    setIsOpen(false);
     await dispatch(logout());
     navigate("/");
   };

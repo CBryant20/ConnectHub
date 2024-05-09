@@ -1,8 +1,9 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectToken } from "../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectToken } from "../features/auth/authSlice";
 
 export default function DropDownMenu({ setOpen }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const token = useSelector(selectToken);
@@ -15,6 +16,11 @@ export default function DropDownMenu({ setOpen }) {
   const handleLogout = async () => {
     await dispatch(logout());
     navigate("/");
+  };
+
+  const handleLogoutAndClose = async () => {
+    handleClick();
+    await handleLogout();
   };
 
   return (
@@ -61,7 +67,7 @@ export default function DropDownMenu({ setOpen }) {
           ) : null}
           {token ? (
             <li>
-              <a onClick={handleLogout}>Log Out</a>
+              <a onClick={handleLogoutAndClose}>Log Out</a>
             </li>
           ) : currentPath !== "/login" && currentPath !== "/register" ? (
             <li>

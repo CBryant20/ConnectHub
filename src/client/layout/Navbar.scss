@@ -79,13 +79,16 @@ $border-color: #ccc;
     position: absolute;
     top: 58px;
     right: 0;
-    z-index: 999;
+    z-index: 1000;
     width: 20em;
     height: 50%;
     border-radius: 20px;
-    padding: 3rem;
+
     background-color: #162e41;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
     transition: height 0.8s, opacity 0.8s;
 
     display: flex;
@@ -93,11 +96,15 @@ $border-color: #ccc;
     align-items: center;
     justify-content: space-around;
 
+    font-size: 1.2rem;
+
     height: 0;
     opacity: 0;
+    display: none;
 
     &.open {
-      height: 30em;
+      display: flex;
+      height: 25em;
       opacity: 1;
     }
 
@@ -109,8 +116,21 @@ $border-color: #ccc;
       margin-bottom: 4rem;
 
       a {
-        color: beige;
         text-decoration: none;
+        color: beige;
+        cursor: pointer;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 2px;
+          background-color: beige;
+          transition: width 0.5s;
+        }
       }
     }
   }
