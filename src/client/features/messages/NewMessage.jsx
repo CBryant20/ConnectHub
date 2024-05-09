@@ -12,7 +12,7 @@ export default function NewMessage() {
   };
 
   return (
-    <form onSubmit={addMessage}>
+    <form onSubmit={addMessage} className='send-form'>
       <input
         type='text'
         placeholder='Tell me whats on your mind!'
