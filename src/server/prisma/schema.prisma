@@ -12,30 +12,51 @@ model User {
   fullName         String
   email            String    @unique
   password         String
+  profilePicture   String?
+  isOnline         Boolean   @default(false)
   isAdmin          Boolean   @default(false)
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
   likes            Like[]
+
+  @@index([email])
 }
 
 model Message {
-  id          Int       @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   content     String
+  status      String       @default("sent")
+  type        String       @default("text")
+  updatedAt   DateTime     @default(now())
+  isDeleted   Boolean      @default(false)
   senderId    Int
-  sender      User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  sender      User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
   recipientId Int
-  recipient   User      @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
+  recipient   User         @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
   replyToId   Int?
-  replyTo     Message?  @relation("MessageReplies", fields: [replyToId], references: [id])
-  replies     Message[] @relation("MessageReplies")
+  replyTo     Message?     @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies     Message[]    @relation("MessageReplies")
   likes       Like[]
+  Attachment  Attachment[]
 }
 
 model Like {
-  id        Int     @id @default(autoincrement())
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  likedAt   DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
-  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
   messageId Int
+
+  @@unique([userId, messageId])
+}
+
+model Attachment {
+  id        Int     @id @default(autoincrement())
+  fileName  String
+  fileType  String
+  fileSize  Int
+  messageId Int
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
 }
