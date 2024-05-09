@@ -1,6 +1,6 @@
 # Connect Hub App
 
-![alt text](src/client/layout/Phone.png)
+![homepage phone](src/client/layout/Phone.png)
 
 Connect Hub is a web-based application designed for communication between users and admin. It serves as a platform where users can create accounts, log in, and send text messages. The app combines design with secure communication, providing users with a way to interact with designated personnel.
 
@@ -39,7 +39,7 @@ To get started, you need to clone the project repository and install the necessa
 
 ## Clone the project repository
 
-git clone git@github.com:CBryant20/ConnectHub.git
+git clone [github repo link](git@github.com:CBryant20/ConnectHub.git)
 
 ## Change to the project directory
 
@@ -94,16 +94,16 @@ Connect Hub requires user authentication. During registration, you'll need to pr
 
 Use your registered email and password to log in. If you forget your password, click "Forgot Password" and you will be asked for your full name and be able to enter a new password.
 
-# If you're interested in contributing to the project, you can do the following:
+## If you're interested in contributing to the project, you can do the following:
 
-## Fork the Repository:
+### Fork the Repository:
 
 Fork the Connect Hub repository to your GitHub account.
 
-## Create a Feature Branch:
+### Create a Feature Branch:
 
 When working on a new feature or bug fix, create a separate branch to make your changes.
 
-## Submit a Pull Request:
+### Submit a Pull Request:
 
 After making changes, submit a pull request with a clear description of what you've done.
