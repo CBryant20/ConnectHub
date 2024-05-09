@@ -1,10 +1,22 @@
-body {
-  margin: 0 auto;
-  padding: 0.5rem;
+/* Outer wrapper with a consistent gradient background */
+.background-wrapper {
   background-image: linear-gradient(
     to bottom,
-    rgb(89, 154, 252),
-    rgb(235, 252, 255)
+    rgb(57, 133, 248),
+    rgb(255, 255, 255)
   );
   height: 100vh;
+  overflow: auto;
+}
+
+#root {
+  margin: 0 auto;
+  padding: 0.5rem;
+  max-width: 80ch;
+}
+
+@media only screen and (min-width: 1224px) {
+  #root {
+    padding: 1rem;
+  }
 }
