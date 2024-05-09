@@ -57,41 +57,53 @@ npm run dev
 
 After starting the server, open your browser and navigate to http://localhost:3000 to see the running application.
 
-Navigating the App
+### Navigating the App
+
 Connect Hub is designed to be user-friendly. After launching the app, you'll see a homepage to log in or register. Once logged in, you can start sending messages to an admin. The app has a simple messaging interface, allowing you to type and send messages.
 
-Sending a Message:
+### Sending a Message:
+
 After logging in, navigate to the message page.
 Start a chat by typing a message and click "Send Message."
 Once a message has been sent, click "Open Chat."
 Inside the chat, received messages are "Green" and sent messages are "Blue."
 To reply to a message, at the bottom of the chat, type your message and click "Reply."
 
-Deleting a message:
+### Deleting a message:
+
 In the chat, click "Delete", inside sent the message.
 
-Viewing Message Threads:
+### Viewing Message Threads:
+
 You can view message threads to see past conversations.
 
-Check and Update Your Info:
+### Check and Update Your Info:
+
 Click "My Info" in the NavBar or Drop down menu
 If you would like to update your Name, Email or Password, click "Change Info"
 
-Logging Out:
+### Logging Out:
+
 Click the "Log Out" button to log out of the app.
 
-Authentication
+### Authentication
+
 Connect Hub requires user authentication. During registration, you'll need to provide your full name, email and password. Email and password credentials are used to log in and access the messaging functionality.
 
-Logging In: Use your registered email and password to log in. If you forget your password, click "Forgot Password" and you will be asked for your full name and be able to enter a new password.
+### Logging In:
 
-#### If you're interested in contributing to the project, you can do the following:
+Use your registered email and password to log in. If you forget your password, click "Forgot Password" and you will be asked for your full name and be able to enter a new password.
 
-Fork the Repository:
+# If you're interested in contributing to the project, you can do the following:
+
+## Fork the Repository:
+
 Fork the Connect Hub repository to your GitHub account.
 
-Create a Feature Branch:
+## Create a Feature Branch:
+
 When working on a new feature or bug fix, create a separate branch to make your changes.
 
-Submit a Pull Request:
+## Submit a Pull Request:
+
 After making changes, submit a pull request with a clear description of what you've done.
