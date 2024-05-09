@@ -39,7 +39,7 @@ To get started, you need to clone the project repository and install the necessa
 
 ## Clone the project repository
 
-git clone [github repo link](git@github.com:CBryant20/ConnectHub.git)
+git clone [CBryant/ConnectHub.git](git@github.com:CBryant20/ConnectHub.git)
 
 ## Change to the project directory
 
