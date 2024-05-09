@@ -66,7 +66,7 @@ Connect Hub is designed to be user-friendly. After launching the app, you'll see
 After logging in, navigate to the message page.
 Start a chat by typing a message and click "Send Message."
 Once a message has been sent, click "Open Chat."
-Inside the chat, received messages are "Green" and sent messages are "Blue."
+Inside the chat, user messages are "Green" and admin messages are "Blue."
 To reply to a message, at the bottom of the chat, type your message and click "Reply."
 
 ### Deleting a message:
