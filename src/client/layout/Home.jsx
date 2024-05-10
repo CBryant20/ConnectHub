@@ -1,3 +1,5 @@
+import PhoneImage from "./Phone.png";
+
 import "./Home.scss";
 
 export default function Home() {
@@ -6,7 +8,7 @@ export default function Home() {
       <div className='home'>
         <h1 className='main-title'>Welcome To My Connect Hub!!!</h1>
         <section className='main-image'>
-          <img src='src/client/layout/Phone.png' alt='phone' />
+          <img src={PhoneImage} alt='error loading phone image' />
         </section>
       </div>
     </>
