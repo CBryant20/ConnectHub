@@ -21,8 +21,10 @@ const seed = async () => {
       const randomPassword = faker.internet.password();
       const randomProfilePicture = faker.image.avatar();
 
-      const user = await prisma.user.create({
-        data: {
+      const user = await prisma.user.upsert({
+        where: { email: randomEmail },
+        update: {},
+        create: {
           fullName: randomFullName,
           email: randomEmail,
           password: randomPassword,
@@ -93,25 +95,21 @@ const seed = async () => {
       const messageIdToLike =
         storedMessageIds[Math.floor(Math.random() * storedMessageIds.length)];
 
-      const existingLike = await prisma.like.findFirst({
+      await prisma.like.upsert({
         where: {
-          userId,
-          messageId: messageIdToLike,
-        },
-      });
-
-      if (!existingLike) {
-        await prisma.like.create({
-          data: {
+          userId_messageId: {
             userId,
             messageId: messageIdToLike,
-            likedAt: new Date(),
           },
-        });
-      }
+        },
+        update: {},
+        create: {
+          userId,
+          messageId: messageIdToLike,
+          likedAt: new Date(),
+        },
+      });
     }
-
-    console.log("Seeding completed successfully.");
   } catch (err) {
     console.error("Error seeding data:", err);
   } finally {
