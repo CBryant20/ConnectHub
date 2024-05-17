@@ -27,7 +27,8 @@ router.get("/most-recent", async (req, res, next) => {
       include: {
         sender: {
           select: {
-            fullName: true,
+            firstName: true,
+            lastName: true,
           },
         },
       },
@@ -62,7 +63,8 @@ router.get("/original-messages", async (req, res, next) => {
       include: {
         sender: {
           select: {
-            fullName: true,
+            firstName: true,
+            lastName: true,
             email: true,
           },
         },
@@ -85,7 +87,8 @@ router.get("/:id", async (req, res, next) => {
       include: {
         sender: {
           select: {
-            fullName: true,
+            firstName: true,
+            lastName: true,
             email: true,
           },
         },
@@ -122,7 +125,7 @@ router.get("/:userId", async (req, res, next) => {
 router.get("/conversation", async (req, res, next) => {
   try {
     const userId = +res.locals.user.id;
-    const fixedRecipientId = 21;
+    const fixedRecipientId = 41;
     const user2 = fixedRecipientId;
 
     const messages = await prisma.message.findMany({
@@ -138,7 +141,8 @@ router.get("/conversation", async (req, res, next) => {
       include: {
         sender: {
           select: {
-            fullName: true,
+            firstName: true,
+            lastName: true,
             email: true,
           },
         },
@@ -228,7 +232,8 @@ router.get("/thread/:messageId", async (req, res, next) => {
       include: {
         sender: {
           select: {
-            fullName: true,
+            firstName: true,
+            lastName: true,
             id: true,
           },
         },
@@ -255,7 +260,7 @@ router.post("/", async (req, res, next) => {
       return next(new ServerError(400, "Content is required."));
     }
 
-    const fixedRecipientId = 21;
+    const fixedRecipientId = 41;
 
     const newMessage = await prisma.message.create({
       data: {
@@ -294,7 +299,7 @@ router.post("/reply/:messageId", async (req, res, next) => {
       data: {
         content,
         senderId,
-        recipientId: 21,
+        recipientId: 41,
         replyToId: messageId,
       },
     });

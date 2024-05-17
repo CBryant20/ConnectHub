@@ -10,7 +10,8 @@ export default function User() {
 
   const [isEditMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
@@ -18,7 +19,8 @@ export default function User() {
   useEffect(() => {
     if (user) {
       setUserData({
-        fullName: user.fullName || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
         email: user.email || "",
         password: user.password || "",
       });
@@ -61,12 +63,23 @@ export default function User() {
 
           <form className='user-form' onSubmit={handleSubmit}>
             <div className='form-group'>
-              <label htmlFor='fullName'>Full Name:</label>
+              <label htmlFor='firstName'>First Name:</label>
               <input
                 type='text'
-                name='fullName'
-                placeholder='First Name Last Name'
-                value={userData.fullName}
+                name='firstName'
+                placeholder='First Name'
+                value={userData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className='form-group'>
+              <label htmlFor='lastName'>Last Name:</label>
+              <input
+                type='text'
+                name='lastName'
+                placeholder='Last Name'
+                value={userData.lastName}
                 onChange={handleChange}
                 required
               />
@@ -104,7 +117,7 @@ export default function User() {
         <section className='user-details'>
           <h1>My Info</h1>
           <p>
-            <strong>Name:</strong> {user.fullName}
+            <strong>Name:</strong> {user.firstName} {user.lastName}
           </p>
           <p>
             <strong>Email:</strong> {user.email}

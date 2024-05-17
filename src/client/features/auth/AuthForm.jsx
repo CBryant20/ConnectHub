@@ -14,10 +14,13 @@ export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [showChangePassword, setShowChangePassword] = useState(false);
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [newFullName, setNewFullName] = useState("");
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
   const [login, { isLoading: loginLoading, error: loginError }] =
@@ -33,7 +36,7 @@ export default function AuthForm() {
     evt.preventDefault();
 
     const credentials = { email, password };
-    const credentials2 = { fullName, email, password };
+    const credentials2 = { firstName, lastName, email, password };
 
     try {
       if (isLogin) {
@@ -47,11 +50,13 @@ export default function AuthForm() {
     }
   };
 
-  const handleChangePassword = async () => {
+  const handleChangePassword = async (evt) => {
+    evt.preventDefault();
     try {
       await changePassword({
-        fullName: newFullName,
-        newEmail,
+        firstName: newFirstName,
+        lastName: newLastName,
+        email: newEmail,
         newPassword,
       }).unwrap();
     } catch (err) {
@@ -69,17 +74,30 @@ export default function AuthForm() {
       <h1>{isLogin ? "Login" : "Register"}</h1>
       <form className='auth-main' onSubmit={handleAuthAction}>
         {!isLogin && (
-          <div>
-            <label>
-              Full Name
-              <input
-                type='text'
-                placeholder='First Name Last Name'
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
-            </label>
-          </div>
+          <>
+            <div>
+              <label>
+                First Name
+                <input
+                  type='text'
+                  placeholder='First Name'
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Last Name
+                <input
+                  type='text'
+                  placeholder='Last Name'
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </label>
+            </div>
+          </>
         )}
         <div>
           <label>
@@ -113,17 +131,17 @@ export default function AuthForm() {
       )}
       {loginError && (
         <p className='auth-error' role='alert'>
-          {loginError}
+          {loginError.message}
         </p>
       )}
       {registerError && (
         <p className='auth-error' role='alert'>
-          {registerError}
+          {registerError.message}
         </p>
       )}
       {changePasswordError && (
-        <p class='auth-error' role='alert'>
-          {changePasswordError}
+        <p className='auth-error' role='alert'>
+          {changePasswordError.message}
         </p>
       )}
       {isLogin && (
@@ -137,12 +155,34 @@ export default function AuthForm() {
           <form className='auth-change' onSubmit={handleChangePassword}>
             <div>
               <label>
-                Full Name
+                First Name
                 <input
                   type='text'
-                  placeholder='First name Last name'
-                  value={newFullName}
-                  onChange={(e) => setNewFullName(e.target.value)}
+                  placeholder='First Name'
+                  value={newFirstName}
+                  onChange={(e) => setNewFirstName(e.target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Last Name
+                <input
+                  type='text'
+                  placeholder='Last Name'
+                  value={newLastName}
+                  onChange={(e) => setNewLastName(e.target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Email
+                <input
+                  type='email'
+                  placeholder='Email'
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
                 />
               </label>
             </div>

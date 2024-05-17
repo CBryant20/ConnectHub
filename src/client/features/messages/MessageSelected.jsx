@@ -50,15 +50,17 @@ export default function MessageSelected() {
             <div
               key={message.id}
               className={`message ${
-                message.senderId === 21 ? "received" : "sent"
+                message.senderId === 41 ? "received" : "sent"
               }`}
             >
               <div
                 className={`message-content ${
-                  message.senderId === 21 ? "align-left" : "align-right"
+                  message.senderId === 41 ? "align-left" : "align-right"
                 }`}
               >
-                <strong>{message.sender.fullName}</strong>
+                <strong>
+                  {message.sender.firstName} {message.sender.lastName}
+                </strong>
                 <p>{message.content}</p>
                 <small>
                   {new Date(message.createdAt).toLocaleString(undefined, {
@@ -67,7 +69,7 @@ export default function MessageSelected() {
                   })}
                 </small>
 
-                {message.senderId !== 21 && (
+                {message.senderId !== 41 && (
                   <button onClick={() => handleDelete(message.id)}>
                     Delete
                   </button>

@@ -18,13 +18,15 @@ export default function Message({ message }) {
   };
 
   const handleDelete = async (messageId) => {
-    deleteMessage(messageId);
+    await deleteMessage(messageId);
   };
 
   return (
     <>
       <div>
-        <h3>Chat started by: {message.sender.fullName}</h3>
+        <h3>
+          Chat started by: {message.sender.firstName} {message.sender.lastName}
+        </h3>
         <p>
           {new Date(message.createdAt).toLocaleString(undefined, {
             timeStyle: "short",
@@ -34,7 +36,7 @@ export default function Message({ message }) {
         <button onClick={openChatWindow} aria-label='open-chat'>
           Open Chat
         </button>
-        {message.senderId === 21 && (
+        {message.senderId === 41 && (
           <button onClick={() => handleDelete(message.id)}>Delete</button>
         )}
       </div>

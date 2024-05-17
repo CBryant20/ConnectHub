@@ -8,12 +8,12 @@ module.exports = router;
 
 router.post("/register", async (req, res, next) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
-    if (!fullName || !email || !password) {
+    if (!firstName || !lastName || !email || !password) {
       throw new ServerError(
         400,
-        "Full name, email, and password are required."
+        "First name, last name, email, and password are required."
       );
     }
 
@@ -25,7 +25,7 @@ router.post("/register", async (req, res, next) => {
     }
 
     const newUser = await prisma.user.create({
-      data: { fullName, email, password },
+      data: { firstName, lastName, email, password },
     });
 
     const token = jwt.sign({ id: newUser.id });
