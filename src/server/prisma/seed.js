@@ -16,7 +16,8 @@ const seed = async () => {
     const fileTypes = ["image/png", "image/jpeg", "video/mp4"];
 
     for (let i = 0; i < 20; i++) {
-      const randomFullName = `${faker.name.firstName()} ${faker.name.lastName()}`;
+      const randomFirstName = faker.name.firstName();
+      const randomLastName = faker.name.lastName();
       const randomEmail = faker.internet.email();
       const randomPassword = faker.internet.password();
       const randomProfilePicture = faker.image.avatar();
@@ -25,7 +26,8 @@ const seed = async () => {
         where: { email: randomEmail },
         update: {},
         create: {
-          fullName: randomFullName,
+          firstName: randomFirstName,
+          lastName: randomLastName,
           email: randomEmail,
           password: randomPassword,
           profilePicture: Math.random() > 0.5 ? randomProfilePicture : null,

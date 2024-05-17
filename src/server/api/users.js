@@ -14,7 +14,7 @@ router.use((req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const users = await prisma.user.findMany({
-      select: { id: true, fullName: true, email: true },
+      select: { id: true, firstName: true, lastName: true, email: true },
     });
     res.json(users);
   } catch (err) {
@@ -32,7 +32,7 @@ router.get("/:id", async (req, res, next) => {
 
     const user = await prisma.user.findUnique({
       where: { id },
-      select: { id: true, fullName: true, email: true },
+      select: { id: true, firstName: true, lastName: true, email: true },
     });
 
     if (!user) {
@@ -52,16 +52,19 @@ router.patch("/:id", async (req, res, next) => {
       return res.status(400).json({ error: "Invalid user ID" });
     }
 
-    const { fullName, email, password } = req.body;
-    if (!fullName || !email || !password === undefined) {
+    const { firstName, lastName, email, password } = req.body;
+    if (!firstName || !lastName || !email || !password === undefined) {
       return next(
-        new ServerError(400, "Full name, email, and password are required.")
+        new ServerError(
+          400,
+          "First name, last name, email, and password are required."
+        )
       );
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: { fullName, email, password: hashedPassword },
+      data: { firstName, lastName, email, password: hashedPassword },
     });
     res.json(updatedUser);
   } catch (err) {
